@@ -1,14 +1,9 @@
 (ns osiris.test.handler
-  (:require [clojure.test :refer :all]
-            [osiris.handler :refer :all]
+  (:require [midje.sweet :refer :all]
+            [osiris.handler :as handler]
             [ring.mock.request :as mock]))
 
-(deftest test-app
-  (testing "main route"
-    (let [response (app (mock/request :get "/"))]
-      (is (= (:status response) 200))
-      (is (= (:body response) "Hello World"))))
-  
-  (testing "not-found route"
-    (let [response (app (mock/request :get "/invalid"))]
-      (is (= (:status response) 404)))))
+(facts "about osiris"
+       (fact "HEAD => 200"
+             (let [response (handler/app (request :head "/"))]
+               (:status response) => 200)))
