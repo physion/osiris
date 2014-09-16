@@ -12,7 +12,7 @@
             :ring {:handler osiris.handler/app}
 
             :aws {:beanstalk {:stack-name   "64bit Amazon Linux running Tomcat 7"
-                              :environments [{:name    "osiris-dev"
+                              :environments [{:name    "development"
                                               :env     {"OVATION_IO_HOST_URI" "https://dev.ovation.io"
                                                         "NEWRELIC"            (or (System/getenv "NEW_RELIC_LICENSE_KEY") "newrelic_license_key")}
                                               :options {"aws:autoscaling:asg"                 {"MinSize" "1"
@@ -22,7 +22,7 @@
                                                         "aws:elb:loadbalancer"                {"SSLCertificateId"      (System/getenv "AWS_SSL_CERT")
                                                                                                "LoadBalancerHTTPSPort" "443"}}}
 
-                                             {:name    "osiris-production"
+                                             {:name    "production"
                                               :env     {"OVATION_IO_HOST_URI" "https://ovation.io"
                                                         "NEWRELIC"            (or (System/getenv "NEW_RELIC_LICENSE_KEY") "newrelic_license_key")}
 
