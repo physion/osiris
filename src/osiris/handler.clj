@@ -1,12 +1,10 @@
 (ns osiris.handler
-  (:require [compojure.core :refer :all]
-            [compojure.handler :as handler]
-            [compojure.route :as route]))
+  (:require [clojure.string :refer [join]]
+            [compojure.api.sweet :refer :all]
+            [schema.core :as s]))
 
-(defroutes app-routes
-  (GET "/" [] "Hello World")
-  (route/resources "/")
-  (route/not-found "Not Found"))
+(defapi app
+        {:formats [:application/json]}
 
-(def app
-  (handler/site app-routes))
+        (swaggered "osiris"
+                   ))
