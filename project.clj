@@ -7,7 +7,9 @@
                            [metosin/compojure-api "0.16.2"]
                            [com.newrelic.agent.java/newrelic-agent "3.9.0"]]
 
-            :plugins [[lein-ring "0.8.11"]]
+            :plugins [[lein-ring "0.8.11"]
+                      [lein-midje "3.1.3"]
+                      [lein-elastic-beanstalk "0.2.8-SNAPSHOT"]]
 
             :ring {:handler osiris.handler/app}
 
