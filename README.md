@@ -16,4 +16,6 @@ To start a web server for the application, run:
 
 ## License
 
-Copyright © 2014 FIXME
+[Eclipse Public License](https://www.eclipse.org/legal/epl-v10.html)
+
+Copyright © 2014 Physion LLC
