@@ -2,27 +2,34 @@
   (:require [midje.sweet :refer :all]
             [osiris.updates :refer :all]
             [osiris.changes :refer [since-seq]]
-            [osiris.checkpoint :refer [last-seq last-seq!]]))
+            [osiris.checkpoint :refer [last-seq last-seq!]]
+            [osiris.couch :refer [changes-since database-checked]]))
 
 (facts "About update processing"
-       (fact "pulls _changes feed from last known sequence"
-             (let [dbname "db-123"]
-               (process {:database dbname}) => ...changes...
-               (provided
-                 (since-seq dbname ...seq...) => ...changes...
-                 (last-seq dbname) => ...seq...
-                 (last-seq! dbname anything) => anything)))
+  (fact "gets changes for update"
+    (changes-for-update ...update...) => ...changes...
+    (provided
+      (database-for-update ...update...) => ...db...
+      (last-seq ...db...) => ...since...
+      (changes-since ...since...) => ...changes...))
 
-       (fact "sets last known sequence in DynamoDB"
-             (let [dbname "db-123"]
-               (process {:database dbname}) => ...changes...
-               (provided
-                 (since-seq dbname ...seq...) => ...changes...
-                 (last-seq dbname) => ...seq...
-                 (last-seq! dbname ...last...) => anything
-                 (last ...changes...) => {:sequence ...last...})))
+  (fact "processes changes for update"
+    (process ...update...) => ...results...
+    (provided
+      (database-for-update ...update...) => ...db...
+      (last-seq ...db...) => ...since...
+      (changes-since ...since...) => ...changes...
+      (#'osiris.updates/process-changes-seq ...db... ...changes...) => ...results...)))
 
-       (fact "calls webhooks for update"
-             true => false))
+;(facts "About call-hooks"
+;  (fact "sets last known sequence in DynamoDB"
+;    (let [dbname "db-123"]
+;      ((call-hooks {:database dbname}) ...change...) => ...result...
+;      (provided
+;        ...change... =contains=> {:sequence ...last...}
+;        (last-seq! dbname ...last...) => anything)))
+;
+;  (fact "calls webhooks for update"
+;    true => false))
 
 

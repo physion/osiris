@@ -14,6 +14,6 @@
                                (header "X-Aws-Sqsd-First-Received-At" "12-12-12")
                                (header "X-Aws-Sqsd-Receive-Count" "1")
                                (content-type "application/json")
-                               (body "{\"database\": \"my_database\"}"))
+                               (body "{\"database\" : \"my-database\"}"))
                    response (handler/app post)]
                (:status response) => 200)))

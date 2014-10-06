@@ -3,14 +3,12 @@
             [osiris.checkpoint :refer :all]))
 
 (facts "About checkpointing"
-       (fact "gets last processed sequence for a database with provided creds"
-             (last-seq ...database... :credentials ...creds...) => ...last...
+       (fact "gets last processed sequence for a database"
+             (last-seq ...database...) => ...last...
              (provided
-               (#'osiris.checkpoint/checkpoint-table ...creds...) => ...table...
-               (#'osiris.checkpoint/checkpoint ...table... ...database...) => ...last...))
+               (osiris.couch/watched-database-state ...database...) => {:last-seq ...last...}))
 
-       (fact "sets last processed sequence for a database with provided creds"
-             (last-seq! ...database... ...last... :credentials ...creds...) => ...last...
+       (fact "sets last processed sequence for a database"
+             (last-seq! ...database... ...last...) => ...last...
              (provided
-               (#'osiris.checkpoint/checkpoint-table ...creds...) => ...table...
-               (#'osiris.checkpoint/checkpoint! ...table... ...database... ...last...) => ...last...)))
+               (osiris.couch/database-last-seq! ...database... ...last...) => ...last...)))
