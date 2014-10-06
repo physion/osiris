@@ -3,7 +3,7 @@
             [osiris.updates :refer :all]
             [osiris.changes :refer [since-seq]]
             [osiris.checkpoint :refer [last-seq last-seq!]]
-            [osiris.couch :refer [changes-since database-checked]]))
+            [osiris.couch :refer [changes-since couch-ready?]]))
 
 (facts "About update processing"
   (fact "gets changes for update"
@@ -21,15 +21,7 @@
       (changes-since ...since...) => ...changes...
       (#'osiris.updates/process-changes-seq ...db... ...changes...) => ...results...)))
 
-;(facts "About call-hooks"
-;  (fact "sets last known sequence in DynamoDB"
-;    (let [dbname "db-123"]
-;      ((call-hooks {:database dbname}) ...change...) => ...result...
-;      (provided
-;        ...change... =contains=> {:sequence ...last...}
-;        (last-seq! dbname ...last...) => anything)))
-;
-;  (fact "calls webhooks for update"
-;    true => false))
+(facts "About webhook callbacks"
+  (fact ))
 
 

@@ -4,21 +4,31 @@
             [osiris.schema :refer [UpdateInfo]]
             [schema.core :as s]
             [osiris.couch :refer [changes-since]]
+            [clojure.walk :refer [keywordize-keys]]
             ))
 
 
 (defn call-hooks
   [db]
   (fn [change]
-    (let []
-      ;; update last-seq for database
-      (last-seq! db (:sequence change))
+    (let [doc (keywordize-keys (:doc change))
+          doc-type (:type doc)
+          hooks ()]
 
-      ())))
+      ;; get webhooks for database, type
+
+      ;; Types: relation, keywords, notes, timeline_events, properties, {OTHER}
+      ;; update last-seq for database
+
+
+      (last-seq! db (:seq change))
+
+      nil)))
 
 (defn- process-changes-seq
-  [db changes]
-  (map (call-hooks db) changes))
+  "Process a seq of changes, assuming doc is included"
+  [db docs]
+  (doall (map (call-hooks db) docs)))
 
 (defn database-for-update
   [update]

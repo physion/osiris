@@ -14,3 +14,9 @@
                       :entity s/Str                         ;; Entity URI
                       :type   (s/enum :update :mention :insertion) ;; message type
                       })
+
+
+(s/defschema RelationType (s/enum "relation"))
+(s/defschema AnnotationType (s/enum "keywords" "properties" "notes" "timeline_events"))
+(s/defschema EntityType str)
+(s/defschema UpdateType (reduce 'or [RelationType AnnotationType EntityType]))

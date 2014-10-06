@@ -7,14 +7,14 @@
   (fact "gets state document for named database"
     (watched-database-state ...database...) => {:last-seq ...last...}
     (provided
-      (database-checked) => true
+      (couch-ready?) => true
       (cl/get-document anything ...database...) => {:_id "id",
                                                     :_rev "rev",
                                                     :last-seq ...last...}))
   (fact "sets state document for named database with existing state document"
     (database-last-seq! ...database... ...last...) => {:last-seq ...last...}
     (provided
-      (database-checked) => true
+      (couch-ready?) => true
       (cl/get-document anything ...database...) => {:_id "id",
                                                     :_rev "rev",
                                                     :last-seq ...other...}
@@ -26,7 +26,7 @@
   (fact "sets state document for named database without existing state document"
     (database-last-seq! ...database... ...last...) => {:last-seq ...last...}
     (provided
-      (database-checked) => true
+      (couch-ready?) => true
       (cl/get-document anything ...database...) => nil
       (cl/put-document anything (contains {:last-seq ...last...})) => {:_id "new-id"
                                                                        :_rev "rev-2"
@@ -37,12 +37,12 @@
   (fact "gets _changes since sequence number"
     (changes-since ...seq...) => ...changes...
     (provided
-      (database-checked) => true
-      (cl/changes :since ...seq...) => ...changes...)))
+      (couch-ready?) => true
+      (cl/changes :since ...seq... :include_docs true) => ...changes...)))
 
 (facts "About database creation"
   (fact "creates database when not checked"
     (ensure-db) => ...meta...
     (provided
-      (database-checked) => false
+      (couch-ready?) => false
       (cl/get-database anything) => ...meta...)))
