@@ -1,6 +1,5 @@
 (ns osiris.updates
-  (:require [osiris.changes :refer [since-seq]]
-            [osiris.checkpoint :refer [last-seq last-seq!]]
+  (:require [osiris.checkpoint :refer [last-seq last-seq!]]
             [osiris.schema :refer [UpdateInfo]]
             [schema.core :as s]
             [osiris.couch :refer [changes-since]]
@@ -18,9 +17,9 @@
       ;; get webhooks for database, type
 
       ;; Types: relation, keywords, notes, timeline_events, properties, {OTHER}
+      ;;TODO
+
       ;; update last-seq for database
-
-
       (last-seq! db (:seq change))
 
       nil)))
@@ -34,6 +33,13 @@
   [update]
   (:database update))
 
+(s/defn changes-for-update
+  "Gets the seq of _changes for the given UpdateInfo"
+  [update :- UpdateInfo]
+  (let [db (database-for-update update)
+        since (last-seq db)]
+    (changes-since since)))
+
 (s/defn process
   "Processes a single update of the form {:database db-name}"
   [update :- UpdateInfo]
@@ -43,12 +49,7 @@
     (process-changes-seq db changes)))
 
 
-(s/defn changes-for-update
-  "Gets the seq of _changes for the given UpdateInfo"
-  [update :- UpdateInfo]
-  (let [db (database-for-update update)
-        since (last-seq db)]
-    (changes-since since)))
+
 
 
 

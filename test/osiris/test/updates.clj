@@ -1,7 +1,6 @@
 (ns osiris.test.updates
   (:require [midje.sweet :refer :all]
             [osiris.updates :refer :all]
-            [osiris.changes :refer [since-seq]]
             [osiris.checkpoint :refer [last-seq last-seq!]]
             [osiris.couch :refer [changes-since couch-ready?]]))
 

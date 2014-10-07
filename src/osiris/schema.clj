@@ -16,7 +16,6 @@
                       })
 
 
-(s/defschema RelationType (s/enum "relation"))
-(s/defschema AnnotationType (s/enum "keywords" "properties" "notes" "timeline_events"))
-(s/defschema EntityType str)
-(s/defschema UpdateType (reduce 'or [RelationType AnnotationType EntityType]))
+(s/defschema FixedType (s/enum "relation" "keywords" "properties" "notes" "timeline_events"))
+(s/defschema EntityType (s/enum "Project" "Experiment"))
+(s/defschema UpdateType (s/either FixedType EntityType))

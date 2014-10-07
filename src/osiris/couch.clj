@@ -43,8 +43,9 @@
   (ensure-db)
   (cl/changes :since since :include_docs true))
 
-(defn webhooks
+(s/defn webhooks
   "Gets all webhooks for the given database for updated documents with the given type"
   [database :- s/Str
    doc-type :- UpdateType]
+  ;; TODO
   nil)
