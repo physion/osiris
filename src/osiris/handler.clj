@@ -11,6 +11,9 @@
         (swaggered "osiris"
           (HEAD* "/" []
             (ok ""))
+          (GET* "/" []
+            (ok "Osiris!"))
+
           (POST* "/updates" []
             :body [update NewUpdate]
             :summary "Processes an update from Aker"
