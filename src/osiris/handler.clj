@@ -4,7 +4,7 @@
             [ring.util.http-response :refer [ok]]
             [schema.core :as s]
             [osiris.updates :refer [process]]
-            [osiris.schema :refer [NewUpdate UpdateInfo]]))
+            [osiris.schema :refer [NewUpdate]]))
 
 ;; --- Routes --- ;;
 (defapi app
