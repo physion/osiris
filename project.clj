@@ -13,6 +13,9 @@
                  [metosin/ring-swagger-ui "2.0.17"]
                  [metosin/ring-http-response "0.5.0"]
 
+                 [ring/ring-servlet "1.3.1"]
+                 [javax.servlet/servlet-api "2.5"]
+
 
                  [com.ashafa/clutch "0.4.0"]
                  [com.cemerick/url "0.1.1"]                 ;; For clutch
