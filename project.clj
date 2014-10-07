@@ -35,12 +35,14 @@
                     :environments [{:name  "osiris-development"
                                     :alias "development"
                                     :env   {"OVATION_IO_HOST_URI"   "https://dev.ovation.io"
-                                            "NEW_RELIC_LICENSE_KEY" "new_relic_license_key"}}
+                                            ;"NEW_RELIC_LICENSE_KEY" "new_relic_license_key"
+                                            }}
 
                                    {:name    "osiris-production"
                                     :alias   "production"
                                     :env     {"OVATION_IO_HOST_URI" "https://ovation.io"
-                                              "NEWRELIC"            "new_relic_license_key"}}]}}
+                                              ;"NEWRELIC"            "new_relic_license_key"
+                                              }}]}}
 
   :profiles {:dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
                                       [ring-mock "0.1.5"]
