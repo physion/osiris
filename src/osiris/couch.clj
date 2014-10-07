@@ -27,7 +27,7 @@
   [database-name]
   (ensure-db)
   (-> (cl/get-document @db database-name)
-    (cl/dissoc-meta)))
+      (cl/dissoc-meta)))
 
 (defn database-last-seq!
   [database-name last-seq]
@@ -35,7 +35,7 @@
   (-> (if-let [doc (cl/get-document @db database-name)]
         (cl/put-document @db (assoc doc :last-seq last-seq))
         (cl/put-document @db {:last-seq last-seq}))
-    (cl/dissoc-meta)))
+      (cl/dissoc-meta)))
 
 (defn changes-since
   "Returns all database changes since the given sequence (a string)"
@@ -43,9 +43,9 @@
   (ensure-db)
   (cl/changes :since since :include_docs true))
 
-(s/defn webhooks
+(defn webhooks
   "Gets all webhooks for the given database for updated documents with the given type"
-  [database :- s/Str
-   doc-type :- UpdateType]
+  [database                                                 ; :- s/Str
+   doc-type]                                                ; :- UpdateType
   ;; TODO
   nil)
