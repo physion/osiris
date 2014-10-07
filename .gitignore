@@ -16,4 +16,3 @@ osiris.iml
 
 deployment_env.sh
 
-war_resources/WEB-INF/lib/newrelic.yml
