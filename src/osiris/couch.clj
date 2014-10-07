@@ -37,9 +37,9 @@
         (cl/put-document @db {:last-seq last-seq}))
     (cl/dissoc-meta)))
 
-(s/defn changes-since
+(defn changes-since
   "Returns all database changes since the given sequence (a string)"
-  [since :- s/Str]
+  [since]
   (ensure-db)
   (cl/changes :since since :include_docs true))
 

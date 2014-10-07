@@ -33,16 +33,16 @@
   [update]
   (:database update))
 
-(s/defn changes-for-update
+(defn changes-for-update
   "Gets the seq of _changes for the given UpdateInfo"
-  [update :- UpdateInfo]
+  [update]
   (let [db (database-for-update update)
         since (last-seq db)]
     (changes-since since)))
 
-(s/defn process
+(defn process
   "Processes a single update of the form {:database db-name}"
-  [update :- UpdateInfo]
+  [update]
   (let [db (database-for-update update)
         changes (changes-for-update update)]
 
