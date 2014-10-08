@@ -21,6 +21,9 @@
                  [com.cemerick/url "0.1.1"]                 ;; For clutch
 
                  [com.newrelic.agent.java/newrelic-agent "3.9.0"]
+
+                 [ring/ring-codec "1.0.0"]
+                 [org.clojure/data.json "0.2.5"]
                  ]
 
   ;:java-agents [[com.newrelic.agent.java/newrelic-agent "3.9.0"]]
