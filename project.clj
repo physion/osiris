@@ -20,7 +20,7 @@
                  [com.ashafa/clutch "0.4.0"]
                  [com.cemerick/url "0.1.1"]                 ;; For clutch
 
-                 [com.newrelic.agent.java/newrelic-agent "3.9.0"]
+                 [com.newrelic.agent.java/newrelic-agent "3.11.0"] ;; NB Update javaagent string
 
                  [ring/ring-codec "1.0.0"]
                  [org.clojure/data.json "0.2.5"]
