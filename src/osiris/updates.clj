@@ -18,7 +18,6 @@
 
       ;; Types: relation, keywords, notes, timeline_events, properties, {OTHER}
       ;;TODO
-      (com.newrelic.api.agent.NewRelic/addCustomParameter (:seq change))
 
       ;; update last-seq for database
       (last-seq! db (:seq change))

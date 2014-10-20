@@ -41,7 +41,9 @@
   "Returns all database changes since the given sequence (a string)"
   [since]
   (ensure-db)
-  (cl/changes :since since :include_docs true))
+  (if since
+    (cl/changes @db :since since :include_docs true))
+  (cl/changes @db :include_docs true))
 
 (defn webhooks
   "Gets all webhooks for the given database for updated documents with the given type"
