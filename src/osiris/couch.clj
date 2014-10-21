@@ -2,7 +2,9 @@
   (:require [com.ashafa.clutch :as cl]
             [osiris.config :as config]
             [osiris.schema :refer [UpdateType]]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [clojure.tools.logging :as logging]
+            ))
 
 (defn database
   "Constructs a database URL for the given database name. Other parameters are pulled from config."
@@ -25,6 +27,7 @@
   []
   (if (not (couch-ready?))
     (do
+      (logging/info "Creating database" @db)
       (let [meta (cl/get-database @db)]
         (swap! token not)
         meta))))

@@ -5,7 +5,7 @@
             [osiris.couch :refer [changes-since]]
             [clojure.walk :refer [keywordize-keys]]
             [com.climate.newrelic.trace :refer [defn-traced]]
-            [clojure.tools.logging :as log]
+            [clojure.tools.logging :as logging]
             ))
 
 
@@ -15,7 +15,7 @@
   [db]
   (fn [change]
     (let [doc (:doc change)]
-      (log/info "Processing webhooks for" db ":" (:_id doc))
+      (logging/info "Processing webhooks for" db ":" (:_id doc))
 
       ;; get webhooks for database, type
 
@@ -24,7 +24,7 @@
 
       ;; update last-seq for database
       (last-seq! db (:seq change))
-      (log/info "Updated last-seq for" db ":" (:seq change))
+      (logging/info "Updated last-seq for" db ":" (:seq change))
 
       (:seq change))))
 
