@@ -11,9 +11,7 @@
 (defn-traced call-hooks
   [db]
   (fn [change]
-    (let [doc (keywordize-keys (:doc change))
-          doc-type (:type doc)
-          hooks ()]
+    (let [doc (keywordize-keys (:doc change))]
 
 
       ;; get webhooks for database, type
