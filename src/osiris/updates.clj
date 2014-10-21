@@ -4,11 +4,10 @@
             [schema.core :as s]
             [osiris.couch :refer [changes-since]]
             [clojure.walk :refer [keywordize-keys]]
-            [com.climate.newrelic.trace :refer [defn-traced]]
             ))
 
 
-(defn-traced call-hooks
+(defn call-hooks
   [db]
   (fn [change]
     (let [doc (keywordize-keys (:doc change))]
@@ -40,7 +39,7 @@
         since (last-seq db)]
     (changes-since db since)))
 
-(defn-traced process
+(defn process
   "Processes a single update of the form {:database db-name}"
   [update]
   (let [db (database-for-update update)
