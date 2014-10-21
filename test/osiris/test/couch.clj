@@ -33,12 +33,18 @@
                                                                        :last-seq ...last...}
       )))
 
+
 (facts "About _changes feed"
   (fact "gets _changes since sequence number"
-    (changes-since ...seq...) => ...changes...
+    (changes-since "seq") => ...changes...
     (provided
       (couch-ready?) => true
-      (cl/changes :since ...seq... :include_docs true) => ...changes...)))
+      (cl/changes anything :since "seq" :include_docs true) => ...changes...))
+  (fact "gets _changes from sequence start"
+    (changes-since nil) => ...all...
+    (provided
+      (couch-ready?) => true?
+      (cl/changes anything :include_docs true) => ...all...)))
 
 (facts "About database creation"
   (fact "creates database when not checked"

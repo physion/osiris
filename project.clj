@@ -41,15 +41,11 @@
   :aws {:beanstalk {:stack-name   "64bit Amazon Linux running Tomcat 7"
                     :environments [{:name  "osiris-development"
                                     :alias "development"
-                                    :env   {"OVATION_IO_HOST_URI"   "https://dev.ovation.io"
-                                            ;"NEW_RELIC_LICENSE_KEY" "new_relic_license_key"
-                                            }}
+                                    :env   {"OVATION_IO_HOST_URI"   "https://dev.ovation.io"}}
 
                                    {:name    "osiris-production"
                                     :alias   "production"
-                                    :env     {"OVATION_IO_HOST_URI" "https://ovation.io"
-                                              ;"NEWRELIC"            "new_relic_license_key"
-                                              }}]}}
+                                    :env     {"OVATION_IO_HOST_URI" "https://ovation.io"}}]}}
 
   :profiles {:dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
                                       [ring-mock "0.1.5"]
