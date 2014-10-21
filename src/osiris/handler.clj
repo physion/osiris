@@ -7,7 +7,8 @@
             [ring.middleware.logger :as logger]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
-            [osiris.log :as log]))
+            [osiris.log :as log]
+            [clojure.tools.logging :as logging]))
 
 (log/start-logging)
 
@@ -28,6 +29,7 @@
                         x-aws-sqsd-first-received-at :- s/Str
                         x-aws-sqsd-receive-count :- s/Str]
 
+        (logging/debug update)
         (let [update-info (-> update
                             (assoc :sqs-msgid x-aws-sqsd-msgid)
                             (assoc :sqs-queue x-aws-sqsd-queue)
