@@ -22,6 +22,7 @@
 
                  [com.newrelic.agent.java/newrelic-agent "3.11.0"] ;; NB Update javaagent string
                  [com.newrelic.agent.java/newrelic-api "3.11.0"] ;; NB Update javaagent string
+                 [com.climate/clj-newrelic "0.1.1"]
 
                  [ring/ring-codec "1.0.0"]
                  [org.clojure/data.json "0.2.5"]

@@ -4,9 +4,15 @@
             [osiris.schema :refer [UpdateType]]
             [schema.core :as s]))
 
-(defonce ^{:private true} db (atom (assoc (cemerick.url/url config/COUCH_HOST config/COUCH_DATABASE)
-                                     :username config/COUCH_USER
-                                     :password config/COUCH_PASSWORD)))
+(defn database
+  "Constructs a database URL for the given database name. Other parameters are pulled from config."
+  [db-name]
+  (assoc (cemerick.url/url config/COUCH_HOST db-name)
+    :username config/COUCH_USER
+    :password config/COUCH_PASSWORD))
+
+
+(defonce ^{:private true} db (atom (database config/COUCH_DATABASE)))
 
 (defonce ^{:private true} token (atom false))
 
@@ -23,27 +29,27 @@
         (swap! token not)
         meta))))
 
-(defn watched-database-state
+(defn watched-state
   [database-name]
   (ensure-db)
   (-> (cl/get-document @db database-name)
       (cl/dissoc-meta)))
 
-(defn database-last-seq!
+(defn set-watched-state!
   [database-name last-seq]
   (ensure-db)
   (-> (if-let [doc (cl/get-document @db database-name)]
         (cl/put-document @db (assoc doc :last-seq last-seq))
-        (cl/put-document @db {:last-seq last-seq}))
+        (cl/put-document @db {:_id database-name :last-seq last-seq}))
       (cl/dissoc-meta)))
 
 (defn changes-since
-  "Returns all database changes since the given sequence (a string)"
-  [since]
-  (ensure-db)
-  (if (nil? since)
-    (cl/changes @db :include_docs true)
-    (cl/changes @db :since since :include_docs true)))
+  "Returns all database changes since the given sequence (a string) for the database db"
+  [db-name since]
+  (let [url (database db-name)]
+    (if (nil? since)
+      (cl/changes url :include_docs true)
+      (cl/changes url :since since :include_docs true))))
 
 (defn webhooks
   "Gets all webhooks for the given database for updated documents with the given type"

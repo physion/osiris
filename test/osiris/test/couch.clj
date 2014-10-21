@@ -5,14 +5,14 @@
 
 (facts "About watched database state"
   (fact "gets state document for named database"
-    (watched-database-state ...database...) => {:last-seq ...last...}
+    (watched-state ...database...) => {:last-seq ...last...}
     (provided
       (couch-ready?) => true
       (cl/get-document anything ...database...) => {:_id "id",
                                                     :_rev "rev",
                                                     :last-seq ...last...}))
   (fact "sets state document for named database with existing state document"
-    (database-last-seq! ...database... ...last...) => {:last-seq ...last...}
+    (set-watched-state! ...database... ...last...) => {:last-seq ...last...}
     (provided
       (couch-ready?) => true
       (cl/get-document anything ...database...) => {:_id "id",
@@ -24,7 +24,7 @@
       ))
 
   (fact "sets state document for named database without existing state document"
-    (database-last-seq! ...database... ...last...) => {:last-seq ...last...}
+    (set-watched-state! ...database... ...last...) => {:last-seq ...last...}
     (provided
       (couch-ready?) => true
       (cl/get-document anything ...database...) => nil
@@ -36,15 +36,15 @@
 
 (facts "About _changes feed"
   (fact "gets _changes since sequence number"
-    (changes-since "seq") => ...changes...
+    (changes-since ...dbname... "seq") => ...changes...
     (provided
-      (couch-ready?) => true
-      (cl/changes anything :since "seq" :include_docs true) => ...changes...))
+      (database ...dbname...) => ...db...
+      (cl/changes ...db... :since "seq" :include_docs true) => ...changes...))
   (fact "gets _changes from sequence start"
-    (changes-since nil) => ...all...
+    (changes-since ...dbname... nil) => ...all...
     (provided
-      (couch-ready?) => true?
-      (cl/changes anything :include_docs true) => ...all...)))
+      (database ...dbname...) => ...db...
+      (cl/changes ...db... :include_docs true) => ...all...)))
 
 (facts "About database creation"
   (fact "creates database when not checked"

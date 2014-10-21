@@ -6,9 +6,9 @@
        (fact "gets last processed sequence for a database"
              (last-seq ...database...) => ...last...
              (provided
-               (osiris.couch/watched-database-state ...database...) => {:last-seq ...last...}))
+               (osiris.couch/watched-state ...database...) => {:last-seq ...last...}))
 
        (fact "sets last processed sequence for a database"
              (last-seq! ...database... ...last...) => ...last...
              (provided
-               (osiris.couch/database-last-seq! ...database... ...last...) => ...last...)))
+               (osiris.couch/set-watched-state! ...database... ...last...) => ...last...)))
