@@ -8,7 +8,7 @@
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
             [osiris.log :as log]
-            [clojure.tools.logging :as logging]))
+            [onelog.core :as logging]))
 
 (log/start-logging)
 

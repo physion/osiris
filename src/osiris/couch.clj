@@ -3,7 +3,7 @@
             [osiris.config :as config]
             [osiris.schema :refer [UpdateType]]
             [schema.core :as s]
-            [clojure.tools.logging :as logging]
+            [onelog.core :as logging]
             ))
 
 (defn database
