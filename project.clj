@@ -26,6 +26,11 @@
 
                  [ring/ring-codec "1.0.0"]
                  [org.clojure/data.json "0.2.5"]
+
+                 [org.clojure/tools.logging "0.3.1"]
+                 [org.slf4j/slf4j-api "1.7.7"]
+                 [org.slf4j/slf4j-log4j12 "1.7.7"]
+                 [log4j/log4j "1.2.17"]
                  ]
 
   ;:java-agents [[com.newrelic.agent.java/newrelic-agent "3.9.0"]]

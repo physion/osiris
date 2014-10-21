@@ -4,24 +4,29 @@
             [schema.core :as s]
             [osiris.couch :refer [changes-since]]
             [clojure.walk :refer [keywordize-keys]]
+            [com.climate.newrelic.trace :refer [defn-traced]]
+            [clojure.tools.logging :as log]
             ))
 
 
-(defn call-hooks
+(defn-traced call-hooks
+  "Returns a callback function for changes on the given database. Callback should be called
+  once with each _changes entry"
   [db]
   (fn [change]
-    (let [doc (keywordize-keys (:doc change))]
-
+    (let [doc (:doc change)]
+      (log/info "Processing webhooks for" db ":" (:_id doc))
 
       ;; get webhooks for database, type
 
       ;; Types: relation, keywords, notes, timeline_events, properties, {OTHER}
-      ;;TODO
+      ;; TODO
 
       ;; update last-seq for database
       (last-seq! db (:seq change))
+      (log/info "Updated last-seq for" db ":" (:seq change))
 
-      nil)))
+      (:seq change))))
 
 (defn- process-changes-seq
   "Process a seq of changes, assuming doc is included"
@@ -39,7 +44,7 @@
         since (last-seq db)]
     (changes-since db since)))
 
-(defn process
+(defn-traced process
   "Processes a single update of the form {:database db-name}"
   [update]
   (let [db (database-for-update update)

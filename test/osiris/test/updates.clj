@@ -21,6 +21,9 @@
       (#'osiris.updates/process-changes-seq ...db... ...changes...) => ...results...)))
 
 (facts "About webhook callbacks"
-  (fact ))
+  (fact "call-hooks updates last seq"
+    ((call-hooks ...db...) {:doc {:_id ...id...} :seq ...seq...}) => ...seq...
+    (provided
+      (last-seq! ...db... ...seq...) => nil)))
 
 

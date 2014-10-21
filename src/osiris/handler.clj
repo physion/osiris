@@ -5,7 +5,10 @@
             [schema.core :as s]
             [schema.coerce :as coerce]
             [osiris.updates :refer [process]]
-            [osiris.schema :refer [NewUpdate]]))
+            [osiris.schema :refer [NewUpdate]]
+            [osiris.log :as log]))
+
+(log/start-logging)
 
 ;; --- Routes --- ;;
 (defapi app
