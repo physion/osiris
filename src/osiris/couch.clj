@@ -27,7 +27,7 @@
   []
   (if (not (couch-ready?))
     (do
-      (logging/info "Creating database" @db)
+      (logging/info "Checking database" @db)
       (let [meta (cl/get-database @db)]
         (swap! token not)
         meta))))
