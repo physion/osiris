@@ -13,6 +13,8 @@
                  [metosin/ring-swagger-ui "2.0.17"]
                  [metosin/ring-http-response "0.5.0"]
 
+                 [ring.middleware.logger "0.5.0"]
+
                  [ring/ring-servlet "1.3.1"]
                  [javax.servlet/servlet-api "2.5"]
 
@@ -40,7 +42,8 @@
 
   :plugins [[lein-ring "0.8.12"]
             [lein-midje "3.1.3"]
-            [lein-elastic-beanstalk "0.2.8-SNAPSHOT"]]
+            [lein-elastic-beanstalk "0.2.8-SNAPSHOT"]
+            [lein-awsuberwar "0.1.0"]]
 
   :ring {:handler osiris.handler/app}
 
