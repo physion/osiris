@@ -18,7 +18,12 @@
       (database-for-update ...update...) => "db"
       (last-seq "db") => ...since...
       (changes-since "db" ...since...) => ...changes...
-      (#'osiris.updates/process-changes-seq "db" ...changes...) => ...results...)))
+      (#'osiris.updates/process-changes-seq "db" ...changes...) => ...results...))
+
+  (fact "skips changes to underworld database"
+    (process ...update...) => nil
+    (provided
+      (database-for-update ...update...) => osiris.config/COUCH_DATABASE)))
 
 (facts "About webhook callbacks"
   (fact "call-hooks updates last seq"
