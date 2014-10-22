@@ -15,4 +15,5 @@ osiris.iml
 .nrepl-port
 
 deployment_env.sh
+out/cljs
 
