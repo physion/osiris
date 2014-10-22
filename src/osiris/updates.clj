@@ -8,6 +8,7 @@
             [clojure.tools.logging :as logging]
             ))
 
+(osiris.logging/setup!)
 
 (defn-traced call-hooks
   "Returns a callback function for changes on the given database. Callback should be called

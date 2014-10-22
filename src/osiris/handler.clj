@@ -6,19 +6,10 @@
             [schema.coerce :as coerce]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
-            [clj-logging-config.log4j :as log-config]
             [clojure.tools.logging :as logging]))
 
 
-(if-let [log-host osiris.config/LOGGING_HOST]
-  (do
-    (log-config/set-logger!
-      :level :debug
-      :out (org.apache.log4j.net.SyslogAppender.
-             (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
-             log-host
-             org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))))
-
+(osiris.logging/setup!)
 
 ;; --- Routes --- ;;
 (defapi app

@@ -3,8 +3,9 @@
             [osiris.config :as config]
             [osiris.schema :refer [UpdateType]]
             [schema.core :as s]
-            [clojure.tools.logging :as logging]
-            ))
+            [clojure.tools.logging :as logging]))
+
+(osiris.logging/setup!)
 
 (defn database
   "Constructs a database URL for the given database name. Other parameters are pulled from config."
