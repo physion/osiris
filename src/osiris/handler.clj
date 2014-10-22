@@ -32,6 +32,8 @@
                           (assoc :sqs-msgid x-aws-sqsd-msgid)
                           (assoc :sqs-queue x-aws-sqsd-queue)
                           (assoc :sqs-first-received-at x-aws-sqsd-first-received-at)
-                          (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))]
+                          (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))
+            result (process update-info)]
 
-        (ok (process update-info))))))
+        (logging/debug result)
+        (ok result)))))

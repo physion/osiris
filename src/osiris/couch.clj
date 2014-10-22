@@ -29,7 +29,7 @@
   []
   (if (not (couch-ready?))
     (do
-      (logging/debug "Checking database" @db)
+      (logging/debug "Checking database" (dissoc @db :username :password))
       (let [meta (cl/get-database @db)]
         (swap! token not)
         meta))))

@@ -21,7 +21,7 @@
 
       ;; get webhooks for database, type
 
-      ;; Types: relation, keywords, notes, timeline_events, properties, {OTHER}
+      ;; Types: Relation, Annotation[ keywords, notes, timeline_events, properties, {OTHER}], Entities
       ;; TODO
 
       ;; update last-seq for database
