@@ -52,3 +52,10 @@
     (provided
       (couch-ready?) => false
       (cl/get-database anything) => ...meta...)))
+
+(facts "About webhooks"
+  (fact "Retrieves webhooks by [database,type]"
+    (webhooks ...db... ...type...) => ...result...
+    (provided
+      (couch-ready?) => true
+      (cl/get-view anything osiris-design-doc :webhooks {:include_docs true} {:key [...db... ...type...]}) => ...result...)))

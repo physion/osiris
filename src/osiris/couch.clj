@@ -25,12 +25,21 @@
   []
   @token)
 
+(def osiris-design-doc "osiris")
+
 (defn ensure-db
   []
   (if (not (couch-ready?))
     (do
       (logging/debug "Checking database" (dissoc @db :username :password))
       (let [meta (cl/get-database @db)]
+        (logging/debug "Creating webhooks view")
+        (cl/with-db @db
+          (cl/save-view osiris-design-doc
+            (cl/view-server-fns :cljs
+              {:webhooks {:map (fn [doc]
+                                 (when (= (aget doc "type") "webhook")
+                                   (js/emit (concat (aget doc "db") (aget doc "type")) nil)))}})))
         (swap! token not)
         meta))))
 
@@ -38,7 +47,7 @@
   [database-name]
   (ensure-db)
   (-> (cl/get-document @db database-name)
-      (cl/dissoc-meta)))
+    (cl/dissoc-meta)))
 
 (defn set-watched-state!
   [database-name last-seq]
@@ -46,7 +55,7 @@
   (-> (if-let [doc (cl/get-document @db database-name)]
         (cl/put-document @db (assoc doc :last-seq last-seq))
         (cl/put-document @db {:_id database-name :last-seq last-seq}))
-      (cl/dissoc-meta)))
+    (cl/dissoc-meta)))
 
 (defn changes-since
   "Returns all database changes since the given sequence (a string) for the database db"
@@ -59,6 +68,6 @@
 (defn webhooks
   "Gets all webhooks for the given database for updated documents with the given type"
   [database                                                 ; :- s/Str
-   doc-type]                                                ; :- UpdateType
-  ;; TODO
-  nil)
+   type]                                                    ; :- document "type" value
+  (ensure-db)
+  (cl/get-view @db osiris-design-doc :webhooks {:include_docs true} {:key [database type]}))

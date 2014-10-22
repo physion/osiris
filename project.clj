@@ -38,6 +38,9 @@
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]
 
+                                                            ;
+                 [org.clojure/clojurescript "0.0-2371"]
+
                  ]
 
   ;:java-agents [[com.newrelic.agent.java/newrelic-agent "3.9.0"]]
