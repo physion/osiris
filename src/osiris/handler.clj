@@ -7,10 +7,12 @@
             [ring.middleware.logger :as logger]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
-            [osiris.log :as log]
             [onelog.core :as logging]))
 
-(log/start-logging)
+(logging/start!)
+(logging/set-debug!)
+(logging/info "System properties:" (System/getProperties))
+(logging/info "Env:" (System/getenv))
 
 ;; --- Routes --- ;;
 (defapi app
