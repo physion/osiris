@@ -1,6 +1,6 @@
 (ns osiris.config)
 
-(def COUCH_HOST (if-let [host (or (System/getenv "COUCH_HOST") (System/getProperty "COUCH_HOST"))]
+(def COUCH_HOST (if-let [host (System/getProperty "COUCH_HOST")]
                   host
                   "http://localhost:5995"))
 
