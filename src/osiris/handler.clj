@@ -10,13 +10,14 @@
             [clojure.tools.logging :as logging]))
 
 
-(log-config/set-logger! :level :debug
+(log-config/set-logger!
+  :level :debug
   :out (org.apache.log4j.net.SyslogAppender.
          (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
          "logs2.papertrailapp.com:22467"
          org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))
 
-(log/info "This is a test log message.")
+(logging/info "This is a test log message.")
 
 ;; --- Routes --- ;;
 (defapi app
@@ -41,8 +42,6 @@
                           (assoc :sqs-first-received-at x-aws-sqsd-first-received-at)
                           (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))]
 
-        (logging/start!)
-        (logging/set-debug!)
         (logging/info "System properties:" (System/getProperties))
         (logging/info "Env:" (System/getenv))
 

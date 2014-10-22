@@ -5,7 +5,7 @@
             [osiris.couch :refer [changes-since]]
             [clojure.walk :refer [keywordize-keys]]
             [com.climate.newrelic.trace :refer [defn-traced]]
-            [onelog.core :as logging]
+            [clojure.tools.logging :as logging]
             ))
 
 
