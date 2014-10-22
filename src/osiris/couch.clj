@@ -33,15 +33,19 @@
     (do
       (logging/debug "Checking database" (dissoc @db :username :password))
       (let [meta (cl/get-database @db)]
-        (logging/debug "Creating webhooks view")
-        (cl/with-db @db
-          (cl/save-view osiris-design-doc
-            (cl/view-server-fns :cljs
-              {:webhooks {:map (fn [doc]
-                                 (when (= (aget doc "type") "webhook")
-                                   (js/emit (concat (aget doc "db") (aget doc "type")) nil)))}})))
         (swap! token not)
         meta))))
+
+(defn ensure-webhooks
+  []
+  (ensure-db)
+  (logging/debug "Creating webhooks view")
+  (cl/with-db @db
+    (cl/save-view osiris-design-doc
+      (cl/view-server-fns :cljs
+        {:webhooks {:map (fn [doc]
+                           (when (= (aget doc "type") "webhook")
+                             (js/emit (concat (aget doc "db") (aget doc "type")) nil)))}}))))
 
 (defn watched-state
   [database-name]
@@ -69,5 +73,5 @@
   "Gets all webhooks for the given database for updated documents with the given type"
   [database                                                 ; :- s/Str
    type]                                                    ; :- document "type" value
-  (ensure-db)
+  (ensure-webhooks)
   (cl/get-view @db osiris-design-doc :webhooks {:include_docs true} {:key [database type]}))
