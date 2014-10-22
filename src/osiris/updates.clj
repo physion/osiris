@@ -47,10 +47,9 @@
 (defn-traced process
   "Processes a single update of the form {:database db-name}"
   [update]
-  (let [db (database-for-update update)
-        changes (changes-for-update update)]
-
-    (process-changes-seq db changes)))
+  (let [db (database-for-update update)]
+    (when (not (= db osiris.config/COUCH_DATABASE))
+      (process-changes-seq db (changes-for-update update)))))
 
 
 
