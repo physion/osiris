@@ -17,7 +17,7 @@
          "logs2.papertrailapp.com:22467"
          org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))
 
-(logging/info "This is a test log message.")
+(logging/info "Hello Osiris!")
 
 ;; --- Routes --- ;;
 (defapi app
