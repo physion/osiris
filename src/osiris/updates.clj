@@ -11,6 +11,19 @@
 
 (setup!)
 
+(defn database-for-update
+  [update]
+  (:database update))
+
+
+(defn changes-for-update
+  "Gets the seq of _changes for the given UpdateInfo"
+  [update]
+  (let [db (database-for-update update)
+        since (last-seq db)]
+    (changes-since db since)))
+
+
 ; Web hooks are
 ; {
 ;   "type": "webhook",
@@ -36,9 +49,13 @@
   "
   [doc]
   (fn [hook]
-    (let [{:keys [status headers body error] :as resp} @(http/post (:url hook) {:body (json/write-str doc) :content-type :json :accept :json})]
-      ;;TODO handle error by putting it into a dead call queue
-      (json/read-str body))))
+    (let [{:keys [status body error]} @(http/post (:url hook) {:body (json/write-str doc) :content-type :json :accept :json})]
+      {:status status,
+       :body   (json/read-str body)
+       :error  error
+       :token  {:hook (:_id hook)
+                :doc  (:_id doc)
+                :rev  (:_rev doc)}})))
 
 
 (defn call-hooks
@@ -50,34 +67,20 @@
       (logging/info "Processing webhooks for" db ":" (:_id doc))
 
       (try
-        (let [hooks (webhooks db (:type doc))]
-          (map (call-hook doc) hooks))
+        (let [hooks (webhooks db (:type doc))
+              results (map (call-hook doc) hooks)]
+
+          ;; TODO check results for failures and send them to the failed queue 
+          (map (fn [result] result) results))
         (finally
           (last-seq! db (:seq change))
           (logging/info "Updated last-seq for" db ":" (:seq change)))))))
 
 
-
-
-
-(defn process-changes-seq
+(defn process-changes
   "Process a seq of changes, assuming doc is included"
   [db docs]
   (doall (map (call-hooks db) docs)))
-
-
-
-
-(defn database-for-update
-  [update]
-  (:database update))
-
-(defn changes-for-update
-  "Gets the seq of _changes for the given UpdateInfo"
-  [update]
-  (let [db (database-for-update update)
-        since (last-seq db)]
-    (changes-since db since)))
 
 (defn process
   "Processes a single update of the form {:database db-name}"
@@ -86,4 +89,4 @@
     (when (not (= db osiris.config/COUCH_DATABASE))
       (do
         (logging/info "Processing changes for" db)
-        (process-changes-seq db (changes-for-update update))))))
+        (process-changes db (changes-for-update update))))))

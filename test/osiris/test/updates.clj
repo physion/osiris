@@ -21,7 +21,7 @@
       (database-for-update ...update...) => "db"
       (last-seq "db") => ...since...
       (changes-since "db" ...since...) => ...changes...
-      (#'osiris.updates/process-changes-seq "db" ...changes...) => ...results...))
+      (process-changes "db" ...changes...) => ...results...))
 
   (fact "skips changes to underworld database"
     (process ...update...) => nil
@@ -30,17 +30,22 @@
 
 (facts "About webhook callbacks"
   (fact "call-hook POSTs doc to url and returns result"
-    (let [doc {:_id "id123" :type "mytype"}]
-      (with-fake-http [{:url ...url... :method :post :body (json/write-str doc)} {:status 201 :body ...resultbody...}]
-        ((call-hook doc) {:type "webhook" :trigger_type "mytype" :db ...db... :url ...url...})) => ...result...
+    (let [doc {:_id "id123" :type "mytype" :_rev "rev-123"}]
+      (with-fake-http [{:url ...url... :method :post :body (json/write-str doc)} {:status ...status... :error ...error... :body ...resultbody...}]
+        ((call-hook doc) {:_id ...hookid... :type "webhook" :trigger_type "mytype" :db ...db... :url ...url...})) => {:status ...status...
+                                                                                                                      :body   ...result...
+                                                                                                                      :error  ...error...
+                                                                                                                      :token  {:hook ...hookid...
+                                                                                                                               :doc  (:_id doc)
+                                                                                                                               :rev  (:_rev doc)}}
       (provided
         (json/read-str ...resultbody...) => ...result...)))
 
   (fact "call-hooks updates last seq"
-    ((call-hooks ...db...) {:doc {:_id ...id... :type ...type...} :seq ...seq...}) => '(...hook...)
+    ((call-hooks ...db...) {:doc {:_id ...id... :type ...type...} :seq ...seq...}) => '(...result...)
     (provided
       (last-seq! ...db... ...seq...) => nil
       (webhooks ...db... ...type...) => '(...hook...)
-      (call-hook anything) => (fn [hook] ...hook...))))
+      (call-hook anything) => (fn [hook] ...result...))))
 
 
