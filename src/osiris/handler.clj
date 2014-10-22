@@ -6,7 +6,17 @@
             [schema.coerce :as coerce]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
-            [onelog.core :as logging]))
+            [clj-logging-config.log4j :as log-config]
+            [clojure.tools.logging :as logging]))
+
+
+(log-config/set-logger! :level :debug
+  :out (org.apache.log4j.net.SyslogAppender.
+         (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
+         "logs2.papertrailapp.com:22467"
+         org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))
+
+(log/info "This is a test log message.")
 
 ;; --- Routes --- ;;
 (defapi app

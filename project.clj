@@ -30,13 +30,14 @@
                  [org.clojure/data.json "0.2.5"]
 
                  [org.clojure/tools.logging "0.3.1"]
+                 [clj-logging-config "1.9.12"]
                  [org.slf4j/slf4j-api "1.7.7"]
                  [org.slf4j/slf4j-log4j12 "1.7.7"]
-                 [onelog "0.4.5"]
                  [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]
+
                  ]
 
   ;:java-agents [[com.newrelic.agent.java/newrelic-agent "3.9.0"]]
