@@ -36,16 +36,26 @@
         (swap! token not)
         meta))))
 
+; Web hooks are
+; {
+;   "type": "webhook",
+;   "trigger_type": <doc type>,
+;   "db": <db>
+; }
 (defn ensure-webhooks
   []
   (ensure-db)
   (logging/debug "Creating webhooks view")
-  (cl/with-db @db
-    (cl/save-view osiris-design-doc
-      (cl/view-server-fns :cljs
-        {:webhooks {:map (fn [doc]
-                           (when (= (aget doc "type") "webhook")
-                             (js/emit (concat (aget doc "db") (aget doc "type")) nil)))}}))))
+  (cl/save-view @db osiris-design-doc
+    (cl/view-server-fns :javascript
+      {:webhooks {:map
+                    "function(doc) {
+                      if(doc.type && doc.type==='webhook') {
+                        emit([doc.db, doc.trigger_type], null);
+                      }
+                    }"
+                 }}))
+  )
 
 (defn watched-state
   [database-name]
