@@ -49,7 +49,9 @@
   [update]
   (let [db (database-for-update update)]
     (when (not (= db osiris.config/COUCH_DATABASE))
-      (process-changes-seq db (changes-for-update update)))))
+      (do
+        (logging/info "Processing changes for" db)
+        (process-changes-seq db (changes-for-update update))))))
 
 
 
