@@ -6,10 +6,11 @@
             [schema.coerce :as coerce]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
-            [clojure.tools.logging :as logging]))
+            [clojure.tools.logging :as logging]
+            [osiris.logging :refer [setup!]]))
 
 
-(osiris.logging/setup!)
+(setup!)
 
 ;; --- Routes --- ;;
 (defapi app

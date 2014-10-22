@@ -6,9 +6,10 @@
             [clojure.walk :refer [keywordize-keys]]
             [com.climate.newrelic.trace :refer [defn-traced]]
             [clojure.tools.logging :as logging]
+            [osiris.logging :refer [setup!]]
             ))
 
-(osiris.logging/setup!)
+(setup!)
 
 (defn-traced call-hooks
   "Returns a callback function for changes on the given database. Callback should be called
