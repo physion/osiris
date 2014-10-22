@@ -38,10 +38,8 @@
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]
 
-                                                            ;
-                 [org.clojure/clojurescript "0.0-2371"]
-
-                 ]
+                 [http-kit "2.1.16"]
+                 [http-kit.fake "0.2.1"]]
 
   ;:java-agents [[com.newrelic.agent.java/newrelic-agent "3.9.0"]]
 
