@@ -4,19 +4,12 @@
             [ring.util.http-response :refer [ok]]
             [schema.core :as s]
             [schema.coerce :as coerce]
-            [ring.middleware.logger :as logger]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
             [onelog.core :as logging]))
 
-(logging/start!)
-(logging/set-debug!)
-(logging/info "System properties:" (System/getProperties))
-(logging/info "Env:" (System/getenv))
-
 ;; --- Routes --- ;;
 (defapi app
-  ;(middlewares [logger/wrap-with-logger])
   (swaggered "osiris"
     (HEAD* "/" []
       (ok ""))
@@ -37,5 +30,10 @@
                           (assoc :sqs-queue x-aws-sqsd-queue)
                           (assoc :sqs-first-received-at x-aws-sqsd-first-received-at)
                           (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))]
+
+        (logging/start!)
+        (logging/set-debug!)
+        (logging/info "System properties:" (System/getProperties))
+        (logging/info "Env:" (System/getenv))
 
         (ok (process update-info))))))
