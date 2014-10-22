@@ -15,3 +15,5 @@
 (def COUCH_PASSWORD (if-let [password (or (System/getenv "COUCH_PASSWORD") (System/getProperty "COUCH_PASSWORD"))]
                       password
                       "boom!"))
+
+(def LOGGING_HOST (System/getProperty "LOGGING_HOST"))

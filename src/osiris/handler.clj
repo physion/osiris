@@ -10,13 +10,17 @@
             [clojure.tools.logging :as logging]))
 
 
-(if-let [papertrail-host (System/getProperty LOGGING_HOST)]
-  (log-config/set-logger!
-    :level :debug
-    :out (org.apache.log4j.net.SyslogAppender.
-           (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
-           LOGGING_HOST
-           org.apache.log4j.net.SyslogAppender/LOG_LOCAL7)))
+(if-let [log-host osiris.config/LOGGING_HOST]
+  (do
+    (log-config/set-logger!
+      :level :debug
+      :out (org.apache.log4j.net.SyslogAppender.
+             (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
+             log-host
+             org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))
+
+    (logging/info "System properties:" (System/getProperties))
+    (logging/info "Env:" (System/getenv))))
 
 
 ;; --- Routes --- ;;
@@ -41,8 +45,5 @@
                           (assoc :sqs-queue x-aws-sqsd-queue)
                           (assoc :sqs-first-received-at x-aws-sqsd-first-received-at)
                           (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))]
-
-        (logging/info "System properties:" (System/getProperties))
-        (logging/info "Env:" (System/getenv))
 
         (ok (process update-info))))))
