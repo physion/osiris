@@ -36,7 +36,6 @@
                       x-aws-sqsd-first-received-at :- s/Str
                       x-aws-sqsd-receive-count :- s/Str]
 
-      (logging/debug update)
       (let [update-info (-> update
                           (assoc :sqs-msgid x-aws-sqsd-msgid)
                           (assoc :sqs-queue x-aws-sqsd-queue)
