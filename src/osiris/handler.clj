@@ -17,10 +17,7 @@
       :out (org.apache.log4j.net.SyslogAppender.
              (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
              log-host
-             org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))
-
-    (logging/info "System properties:" (System/getProperties))
-    (logging/info "Env:" (System/getenv))))
+             org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))))
 
 
 ;; --- Routes --- ;;
