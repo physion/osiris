@@ -10,14 +10,14 @@
             [clojure.tools.logging :as logging]))
 
 
-(log-config/set-logger!
-  :level :debug
-  :out (org.apache.log4j.net.SyslogAppender.
-         (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
-         "logs2.papertrailapp.com:22467"
-         org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))
+(if-let [papertrail-host (System/getProperty LOGGING_HOST)]
+  (log-config/set-logger!
+    :level :debug
+    :out (org.apache.log4j.net.SyslogAppender.
+           (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
+           LOGGING_HOST
+           org.apache.log4j.net.SyslogAppender/LOG_LOCAL7)))
 
-(logging/info "Hello Osiris!")
 
 ;; --- Routes --- ;;
 (defapi app
