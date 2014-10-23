@@ -26,14 +26,6 @@
     (changes-since db since)))
 
 
-; Web hooks are
-; {
-;   "type": "webhook",
-;   "trigger_type": <doc type>,
-;   "db": <db>
-;   "url": <url>
-; }
-;
 (defn call-hook
   "Makes a webhook call function for the given hook document.
 

@@ -47,7 +47,9 @@
             [lein-elastic-beanstalk "0.2.8-SNAPSHOT"]
             [lein-awsuberwar "0.1.0"]]
 
-  :ring {:handler osiris.handler/app}
+  :ring {:handler osiris.handler/app
+         :init    osiris.logging/setup!}
+
 
   ;; For New Relic, we need to bundle newrelic.yml and newrelic.jar
   :war-resources-path "war_resources"
@@ -55,11 +57,11 @@
   :aws {:beanstalk {:stack-name   "64bit Amazon Linux running Tomcat 7"
                     :environments [{:name  "osiris-development"
                                     :alias "development"
-                                    :env   {"OVATION_IO_HOST_URI"   "https://dev.ovation.io"}}
+                                    :env   {"OVATION_IO_HOST_URI" "https://dev.ovation.io"}}
 
-                                   {:name    "osiris-production"
-                                    :alias   "production"
-                                    :env     {"OVATION_IO_HOST_URI" "https://ovation.io"}}]}}
+                                   {:name  "osiris-production"
+                                    :alias "production"
+                                    :env   {"OVATION_IO_HOST_URI" "https://ovation.io"}}]}}
 
   :profiles {:dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
                                       [ring-mock "0.1.5"]
