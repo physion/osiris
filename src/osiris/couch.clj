@@ -79,4 +79,4 @@
   [database                                                 ; :- s/Str
    type]                                                    ; :- document "type" value
   ;(ensure-webhooks)
-  (cl/get-view @db osiris-design-doc :webhooks {:include_docs true} {:key [database type]}))
+  (cl/get-view @db osiris-design-doc :webhooks {:include_docs true :key [database type]}))
