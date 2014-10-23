@@ -38,8 +38,7 @@
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]
 
-                 [http-kit "2.1.16"]
-                 [http-kit.fake "0.2.1"]]
+                 [com.cemerick/bandalore "0.0.6"]]
 
   ;:java-agents [[com.newrelic.agent.java/newrelic-agent "3.9.0"]]
 

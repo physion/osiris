@@ -3,9 +3,9 @@
             [osiris.updates :refer :all]
             [osiris.checkpoint :refer [last-seq last-seq!]]
             [osiris.couch :refer [changes-since couch-ready? webhooks]]
-            [org.httpkit.client :as http]
-            [org.httpkit.fake :refer [with-fake-http]]
-            [clojure.data.json :as json]))
+            [cemerick.bandalore :as sqs]
+            [clojure.data.json :as json]
+            [osiris.config :as config]))
 
 (facts "About update processing"
   (fact "gets changes for update"
@@ -29,23 +29,17 @@
       (database-for-update ...update...) => osiris.config/COUCH_DATABASE)))
 
 (facts "About webhook callbacks"
-  (fact "call-hook POSTs doc to url and returns result"
-    (let [doc {:_id "id123" :type "mytype" :_rev "rev-123"}]
-      (with-fake-http [{:url ...url... :method :post :body (json/write-str doc)} {:status ...status... :error ...error... :body ...resultbody...}]
-        ((call-hook doc) {:_id ...hookid... :type "webhook" :trigger_type "mytype" :db ...db... :url ...url...})) => {:status ...status...
-                                                                                                                      :body   ...result...
-                                                                                                                      :error  ...error...
-                                                                                                                      :token  {:hook ...hookid...
-                                                                                                                               :doc  (:_id doc)
-                                                                                                                               :rev  (:_rev doc)}}
-      (provided
-        (json/read-str ...resultbody...) => ...result...)))
+  (fact "call-hook queues the hook and doc _id and _rev"
+    (call-hook ...client... {:_id ...id... :_rev ...rev...} {:_id ...hookid...}) => ...msg...
+    (provided
+      (json/write-str {:doc_id ...id... :doc_rev ...rev... :hook_id ...hookid...}) => ...body...
+      (sqs/send ...client... config/CALL_QUEUE ...body...) => ...msg...))
 
   (fact "call-hooks updates last seq"
-    ((call-hooks ...db...) {:doc {:_id ...id... :type ...type...} :seq ...seq...}) => '(...result...)
+    (call-hooks ...db... {:doc {:_id ...id... :type ...type...} :seq ...seq...}) => '(...result...)
     (provided
       (last-seq! ...db... ...seq...) => nil
       (webhooks ...db... ...type...) => '(...hook...)
-      (call-hook anything) => (fn [hook] ...result...))))
+      (call-hook client {:_id ...id... :type ...type...} ...hook...) => ...result...)))
 
 
