@@ -59,4 +59,4 @@
     (provided
       (couch-ready?) => true
       (cl/save-view anything osiris-design-doc anything) => true
-      (cl/get-view anything osiris-design-doc :webhooks {:include_docs true} {:key [...db... ...type...]}) => ...result...)))
+      (cl/get-view anything osiris-design-doc :webhooks {:include_docs true :key [...db... ...type...]}) => ...result...)))

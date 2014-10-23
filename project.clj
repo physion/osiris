@@ -38,10 +38,11 @@
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]
 
-                                                            ;
-                 [org.clojure/clojurescript "0.0-2371"]
+                 ;[org.apache.logging.log4j/log4j-slf4j-impl "2.0.2"]
+                 ;[org.apache.logging.log4j/log4j-api "2.0.2"]
+                 ;[org.apache.logging.log4j/log4j-core "2.0.2"]
 
-                 ]
+                 [com.cemerick/bandalore "0.0.6"]]
 
   ;:java-agents [[com.newrelic.agent.java/newrelic-agent "3.9.0"]]
 
@@ -50,19 +51,20 @@
             [lein-elastic-beanstalk "0.2.8-SNAPSHOT"]
             [lein-awsuberwar "0.1.0"]]
 
-  :ring {:handler osiris.handler/app}
+  :ring {:handler osiris.handler/app}                                                  ;
+
 
   ;; For New Relic, we need to bundle newrelic.yml and newrelic.jar
-  :war-resources-path "war_resources"
+  :war-resources-path "war-resources"
 
   :aws {:beanstalk {:stack-name   "64bit Amazon Linux running Tomcat 7"
                     :environments [{:name  "osiris-development"
                                     :alias "development"
-                                    :env   {"OVATION_IO_HOST_URI"   "https://dev.ovation.io"}}
+                                    :env   {"OVATION_IO_HOST_URI" "https://dev.ovation.io"}}
 
-                                   {:name    "osiris-production"
-                                    :alias   "production"
-                                    :env     {"OVATION_IO_HOST_URI" "https://ovation.io"}}]}}
+                                   {:name  "osiris-production"
+                                    :alias "production"
+                                    :env   {"OVATION_IO_HOST_URI" "https://ovation.io"}}]}}
 
   :profiles {:dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
                                       [ring-mock "0.1.5"]
