@@ -2,8 +2,7 @@
   (:require [com.ashafa.clutch :as cl]
             [osiris.config :as config]
             [schema.core :as s]
-            [clojure.tools.logging :as logging]
-            [osiris.logging :refer [setup!]]))
+            [clojure.tools.logging :as logging]))
 
 
 (defn database

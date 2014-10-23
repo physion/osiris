@@ -6,8 +6,7 @@
             [schema.coerce :as coerce]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
-            [clojure.tools.logging :as logging]
-            [osiris.logging]))
+            [clojure.tools.logging :as logging]))
 
 (defn init
   "Servlet init"
@@ -37,4 +36,4 @@
                           (assoc :sqs-first-received-at x-aws-sqsd-first-received-at)
                           (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))
             result (process update-info)]
-        (ok {:status "ok"})))))
+        (ok {:messages (flatten result)})))))
