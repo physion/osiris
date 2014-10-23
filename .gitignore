@@ -17,3 +17,5 @@ osiris.iml
 deployment_env.sh
 out/cljs
 
+
+war-resources/WEB-INF/lib/.DS_Store

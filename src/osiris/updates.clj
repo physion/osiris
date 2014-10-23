@@ -50,8 +50,10 @@
 (defn ensure-queue
   "Ensures the config/CALL_QUEUE queue is created"
   []
-  (if-not (some #{config/CALL_QUEUE} (sqs/list-queues client))
-    (sqs/create-queue client config/CALL_QUEUE)))
+  (if-let [queue config/CALL_QUEUE]
+    (if-not (some #{queue} (sqs/list-queues client))
+      (sqs/create-queue client queue))
+    (logging/warn "No config/CALL_QUEUE defined")))
 
 (defn call-hooks
   "Returns a callback function for changes on the given database. Callback should be called
