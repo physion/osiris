@@ -11,7 +11,6 @@
             [osiris.config :as config]))
 
 
-(setup!)
 
 (defn database-for-update
   [update]

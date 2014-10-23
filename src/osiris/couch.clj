@@ -5,7 +5,6 @@
             [clojure.tools.logging :as logging]
             [osiris.logging :refer [setup!]]))
 
-(setup!)
 
 (defn database
   "Constructs a database URL for the given database name. Other parameters are pulled from config."

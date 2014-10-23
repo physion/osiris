@@ -37,6 +37,5 @@
                           (assoc :sqs-first-received-at x-aws-sqsd-first-received-at)
                           (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))
             result (process update-info)]
-        (osiris.logging/setup!)
         (logging/info result)
         (ok "success")))))
