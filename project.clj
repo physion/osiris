@@ -47,8 +47,7 @@
             [lein-elastic-beanstalk "0.2.8-SNAPSHOT"]
             [lein-awsuberwar "0.1.0"]]
 
-  :ring {:handler osiris.handler/app
-         :init    osiris.logging/setup!}
+  :ring {:handler osiris.handler/app}
 
 
   ;; For New Relic, we need to bundle newrelic.yml and newrelic.jar

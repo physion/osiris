@@ -25,6 +25,7 @@
                       x-aws-sqsd-first-received-at :- s/Str
                       x-aws-sqsd-receive-count :- s/Str]
 
+      (osiris.logging/setup!)
       (let [update-info (-> update
                           (assoc :sqs-msgid x-aws-sqsd-msgid)
                           (assoc :sqs-queue x-aws-sqsd-queue)
