@@ -10,6 +10,7 @@
             [clojure.data.json :as json]
             [osiris.config :as config]))
 
+
 (setup!)
 
 (defn database-for-update
@@ -60,10 +61,10 @@
     (logging/info "Processing webhooks for" db ":" (:_id doc))
 
     (try
-      (let [hooks (webhooks db (:type doc))]
-        (if (empty? hooks)
-          '()
-          (map (partial call-hook client doc) hooks)))
+      (let [hooks (webhooks db (:type doc))
+            messages (map (partial call-hook client doc) hooks)]
+        (logging/info "Messages:" messages)
+        messages)
       (finally
         (last-seq! db (:seq change))
         (logging/info "Updated last-seq for" db ":" (:seq change))))))
@@ -82,5 +83,5 @@
       (logging/info "Processing changes for" db)
       (let [queue (ensure-queue)
             result (process-changes db (changes-for-update update))]
-        (logging/info result)
+        (logging/info "process:" result)
         result))))
