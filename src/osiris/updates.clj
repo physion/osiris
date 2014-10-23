@@ -61,7 +61,8 @@
   [db change]
   (let [doc (:doc change)]
     (logging/info "Processing webhooks for" db ":" (:_id doc))
-
+    (logging/info (webhooks db (:type doc)))
+    (logging/info "...done getting webhooks")
     (let [hooks (webhooks db (:type doc))
           messages (map (partial call-hook client doc) hooks)]
       (logging/info "Messages:" messages)
