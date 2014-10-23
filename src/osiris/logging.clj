@@ -4,10 +4,9 @@
 
 (defn setup! []
   (if-let [log-host LOGGING_HOST]
-    (do
-      (log-config/set-logger!
-        :level :debug
-        :out (org.apache.log4j.net.SyslogAppender.
-               (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
-               log-host
-               org.apache.log4j.net.SyslogAppender/LOG_LOCAL7)))))
+    (log-config/set-logger!
+      :level :debug
+      :out (org.apache.log4j.net.SyslogAppender.
+             (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
+             log-host
+             org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))))

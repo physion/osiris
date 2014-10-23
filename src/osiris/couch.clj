@@ -78,5 +78,5 @@
   "Gets all webhooks for the given database for updated documents with the given type"
   [database                                                 ; :- s/Str
    type]                                                    ; :- document "type" value
-  (ensure-webhooks)
+  ;(ensure-webhooks)
   (cl/get-view @db osiris-design-doc :webhooks {:include_docs true} {:key [database type]}))

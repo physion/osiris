@@ -5,7 +5,6 @@
             [osiris.couch :refer [changes-since webhooks]]
             [clojure.walk :refer [keywordize-keys]]
             [clojure.tools.logging :as logging]
-            [osiris.logging :refer [setup!]]
             [cemerick.bandalore :as sqs]
             [clojure.data.json :as json]
             [osiris.config :as config]))
