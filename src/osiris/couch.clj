@@ -36,12 +36,6 @@
         (swap! token not)
         meta))))
 
-; Web hooks are
-; {
-;   "type": "webhook",
-;   "trigger_type": <doc type>,
-;   "db": <db>
-; }
 (defn ensure-webhooks
   []
   (ensure-db)
@@ -63,12 +57,15 @@
   (-> (cl/get-document @db database-name)
     (cl/dissoc-meta)))
 
+
+(def database-state-type "database-state")
+
 (defn set-watched-state!
   [database-name last-seq]
   (ensure-db)
   (-> (if-let [doc (cl/get-document @db database-name)]
-        (cl/put-document @db (assoc doc :last-seq last-seq))
-        (cl/put-document @db {:_id database-name :last-seq last-seq}))
+        (cl/put-document @db (assoc doc :last-seq last-seq :type database-state-type))
+        (cl/put-document @db {:_id database-name :last-seq last-seq :type database-state-type}))
     (cl/dissoc-meta)))
 
 (defn changes-since

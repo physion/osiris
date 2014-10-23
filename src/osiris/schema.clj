@@ -10,12 +10,13 @@
                           (assoc :sqs-first-received-at s/Str)
                           (assoc :sqs-receive-count s/Str)))
 
-(s/defschema Webhook {:user   s/Uuid                        ;; User Id
-                      :entity s/Str                         ;; Entity URI
-                      :type   (s/enum :update :mention :insertion) ;; message type
+
+;;NB Shared with Iris. We should factor this into a common library
+(s/defschema Webhook {:_id          s/Str
+                      :_rev         s/Str
+                      :type         "webhook"
+                      :user         s/Uuid                  ;; User Id
+                      :trigger_type s/Str                   ;; Entity type
+                      :db           s/Str
+                      :url          s/Str
                       })
-
-
-(s/defschema FixedType (s/enum "relation" "keywords" "properties" "notes" "timeline_events"))
-(s/defschema EntityType (s/enum "Project" "Experiment"))
-(s/defschema UpdateType (s/either FixedType EntityType))

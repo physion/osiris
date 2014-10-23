@@ -54,6 +54,7 @@
     (sqs/send client config/CALL_QUEUE (json/write-str msg))))
 
 (defn ensure-queue
+  "Ensures the config/CALL_QUEUE queue is created"
   []
   (if-not (some #{config/CALL_QUEUE} (sqs/list-queues client))
     (sqs/create-queue client config/CALL_QUEUE)))
