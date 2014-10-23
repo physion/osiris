@@ -40,9 +40,9 @@
 
   Returns the result of the http POST
   "
-  [client doc hook]
+  [client db doc hook]
   (logging/info "Calling hook" doc hook)
-  (let [msg {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:_id hook)}]
+  (let [msg {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:_id hook) :db db}]
     (logging/info "Sending message" msg "to" config/CALL_QUEUE)
     (:id (sqs/send client config/CALL_QUEUE (json/write-str msg)))))
 
@@ -61,7 +61,7 @@
   (let [doc (:doc change)]
     (logging/info "Processing webhooks for" db ":" (:_id doc) "/" (:type doc))
     (let [hooks (webhooks db (:type doc))
-          messages (map (partial call-hook client doc) hooks)]
+          messages (map (partial call-hook client db doc) hooks)]
       (logging/info "Messages:" messages)
       (last-seq! db (:seq change))
       (logging/info "Updated last-seq for" db ":" (:seq change))

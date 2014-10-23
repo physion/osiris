@@ -31,9 +31,9 @@
 
 (facts "About webhook callbacks"
   (fact "call-hook queues the hook and doc _id and _rev"
-    (call-hook ...client... {:_id ...id... :_rev ...rev...} {:_id ...hookid...}) => ...msg...
+    (call-hook ...client... ...db... {:_id ...id... :_rev ...rev...} {:_id ...hookid...}) => ...msg...
     (provided
-      (json/write-str {:doc_id ...id... :doc_rev ...rev... :hook_id ...hookid...}) => ...body...
+      (json/write-str {:doc_id ...id... :doc_rev ...rev... :hook_id ...hookid... :db ...db...}) => ...body...
       (sqs/send ...client... config/CALL_QUEUE ...body...) => {:id ...msg...}))
 
   (fact "call-hooks updates last seq"
@@ -41,6 +41,6 @@
     (provided
       (last-seq! ...db... ...seq...) => nil
       (webhooks ...db... ...type...) => '(...hook...)
-      (call-hook client {:_id ...id... :type ...type...} ...hook...) => ...result...)))
+      (call-hook client ...db... {:_id ...id... :type ...type...} ...hook...) => ...result...)))
 
 
