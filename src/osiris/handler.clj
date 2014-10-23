@@ -9,6 +9,12 @@
             [clojure.tools.logging :as logging]
             [osiris.logging]))
 
+(defn init
+  "Servlet init"
+  []
+  (osiris.logging/setup!))
+
+
 ;; --- Routes --- ;;
 (defapi app
   (swaggered "osiris"

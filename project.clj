@@ -47,11 +47,12 @@
             [lein-elastic-beanstalk "0.2.8-SNAPSHOT"]
             [lein-awsuberwar "0.1.0"]]
 
-  :ring {:handler osiris.handler/app}
+  :ring {:handler osiris.handler/app
+         :init    osiris.handler/init}
 
 
   ;; For New Relic, we need to bundle newrelic.yml and newrelic.jar
-  :war-resources-path "war_resources"
+  :war-resources-path "war-resources"
 
   :aws {:beanstalk {:stack-name   "64bit Amazon Linux running Tomcat 7"
                     :environments [{:name  "osiris-development"
