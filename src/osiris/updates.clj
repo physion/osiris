@@ -43,6 +43,7 @@
   "
   [client doc hook]
   (let [msg {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:_id hook)}]
+    (logging/info "Sending message" msg "to" config/CALL_QUEUE)
     (:id (sqs/send client config/CALL_QUEUE (json/write-str msg)))))
 
 (defn ensure-queue
@@ -60,7 +61,9 @@
 
     (try
       (let [hooks (webhooks db (:type doc))]
-        (map (partial call-hook client doc) hooks))
+        (if (empty? hooks)
+          '()
+          (map (partial call-hook client doc) hooks)))
       (finally
         (last-seq! db (:seq change))
         (logging/info "Updated last-seq for" db ":" (:seq change))))))
