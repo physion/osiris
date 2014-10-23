@@ -62,14 +62,12 @@
   (let [doc (:doc change)]
     (logging/info "Processing webhooks for" db ":" (:_id doc))
 
-    (try
-      (let [hooks (webhooks db (:type doc))
-            messages (map (partial call-hook client doc) hooks)]
-        (logging/info "Messages:" messages)
-        messages)
-      (finally
-        (last-seq! db (:seq change))
-        (logging/info "Updated last-seq for" db ":" (:seq change))))))
+    (let [hooks (webhooks db (:type doc))
+          messages (map (partial call-hook client doc) hooks)]
+      (logging/info "Messages:" messages)
+      (last-seq! db (:seq change))
+      (logging/info "Updated last-seq for" db ":" (:seq change))
+      messages)))
 
 
 (defn process-changes
