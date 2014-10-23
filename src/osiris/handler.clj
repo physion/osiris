@@ -6,7 +6,8 @@
             [schema.coerce :as coerce]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
-            [clojure.tools.logging :as logging]))
+            [clojure.tools.logging :as logging]
+            [osiris.logging]))
 
 (defn init
   "Servlet init"
