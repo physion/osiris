@@ -7,10 +7,10 @@
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
             [clojure.tools.logging :as logging]
-            [osiris.logging :refer [setup!]]))
+            [osiris.logging]))
 
 
-(setup!)
+(osiris.logging/setup!)
 
 ;; --- Routes --- ;;
 (defapi app
@@ -35,5 +35,5 @@
                           (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))
             result (process update-info)]
 
-        (logging/debug result)
+        (logging/debug "/updates =>" result)
         (ok result)))))

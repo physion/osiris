@@ -51,7 +51,7 @@
   "
   [client doc hook]
   (let [msg {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:_id hook)}]
-    (sqs/send client config/CALL_QUEUE (json/write-str msg))))
+    (:id (sqs/send client config/CALL_QUEUE (json/write-str msg)))))
 
 (defn ensure-queue
   "Ensures the config/CALL_QUEUE queue is created"

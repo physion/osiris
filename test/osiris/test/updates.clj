@@ -33,7 +33,7 @@
     (call-hook ...client... {:_id ...id... :_rev ...rev...} {:_id ...hookid...}) => ...msg...
     (provided
       (json/write-str {:doc_id ...id... :doc_rev ...rev... :hook_id ...hookid...}) => ...body...
-      (sqs/send ...client... config/CALL_QUEUE ...body...) => ...msg...))
+      (sqs/send ...client... config/CALL_QUEUE ...body...) => {:id ...msg...}))
 
   (fact "call-hooks updates last seq"
     (call-hooks ...db... {:doc {:_id ...id... :type ...type...} :seq ...seq...}) => '(...result...)
