@@ -59,7 +59,7 @@
   once with each _changes entry"
   [db change]
   (let [doc (:doc change)]
-    (logging/info "Processing webhooks for" db ":" (:_id doc))
+    (logging/info "Processing webhooks for" db ":" (:_id doc) "/" (:type doc))
     (let [hooks (webhooks db (:type doc))
           messages (map (partial call-hook client doc) hooks)]
       (logging/info "Messages:" messages)
@@ -79,7 +79,5 @@
   (let [db (database-for-update update)]
     (when (not (= db osiris.config/COUCH_DATABASE))
       (logging/info "Processing changes for" db)
-      (let [queue (ensure-queue)
-            result (process-changes db (changes-for-update update))]
-        (logging/info "process:" result)
-        result))))
+      (ensure-queue)
+      (process-changes db (changes-for-update update)))))

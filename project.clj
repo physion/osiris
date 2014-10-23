@@ -32,9 +32,15 @@
                  [org.clojure/tools.logging "0.3.1"]
                  [clj-logging-config "1.9.12"]
                  [org.slf4j/slf4j-api "1.7.7"]
-                 [org.apache.logging.log4j/log4j-slf4j-impl "2.0.2"]
-                 [org.apache.logging.log4j/log4j-api "2.0.2"]
-                 [org.apache.logging.log4j/log4j-core "2.0.2"]
+                 [org.slf4j/slf4j-log4j12 "1.7.7"]
+                 [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
+                                                    javax.jms/jms
+                                                    com.sun.jmdk/jmxtools
+                                                    com.sun.jmx/jmxri]]
+
+                 ;[org.apache.logging.log4j/log4j-slf4j-impl "2.0.2"]
+                 ;[org.apache.logging.log4j/log4j-api "2.0.2"]
+                 ;[org.apache.logging.log4j/log4j-core "2.0.2"]
 
                  [com.cemerick/bandalore "0.0.6"]]
 
@@ -45,8 +51,7 @@
             [lein-elastic-beanstalk "0.2.8-SNAPSHOT"]
             [lein-awsuberwar "0.1.0"]]
 
-  :ring {:handler osiris.handler/app
-         }                                                  ;:init    osiris.handler/init
+  :ring {:handler osiris.handler/app}                                                  ;
 
 
   ;; For New Relic, we need to bundle newrelic.yml and newrelic.jar
