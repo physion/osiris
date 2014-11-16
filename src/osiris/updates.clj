@@ -35,19 +35,7 @@
 ; }
 ;
 (defn call-hook
-  "Makes a webhook call function for the given hook document.
-
-  Web hooks are
-  {
-    type: webhook,
-    trigger_typ: <doc type>,
-    db: <db>
-    url: <url>
-  }
-
-  A POST is sent to the url with a WebCallback as body.
-
-  Returns the result of the http POST
+  "Queues a webhook call function for the given document and hook.
   "
   [client doc hook]
   (let [msg {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:_id hook)}]

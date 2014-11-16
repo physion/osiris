@@ -1,6 +1,25 @@
-# osiris
+# Osiris
 
-FIXME
+
+## Overview
+Osiris responds to Aker notifications, sending a Webhook request to Iris for each webhook of each changed document.
+
+## Webhook documents
+
+Webhook documents in the Underworld DB should have the form:
+
+    {
+        "type": "webhook",
+        "db": "<databse name>",
+        "trigger_type": "<document type>"
+    }
+
+We have not implemented conditional triggers.
+
+<!---
+Should we be using Regex or EDN-matching?
+-->
+
 
 ## Prerequisites
 
