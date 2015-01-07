@@ -17,8 +17,8 @@
                       :type                    "webhook"
                       :user                    s/Uuid       ;; User Id
                       :trigger_type            s/Str        ;; Entity type
-                      (s/optional-key :db)     s/Str
+                      (s/optional-key  :db)     s/Str
                       :url                     s/Str
                       :api_key                 s/Str        ;; URL API Key
-                      (s/optional-key :filter) [s/Keyword s/Str] ;; filter field key and regex
+                      (s/optional-key :filter) [[s/Keyword s/Str]] ;; filter field key and regex
                       })
