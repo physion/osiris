@@ -77,5 +77,7 @@
   "Gets all webhooks for the given database for updated documents with the given type"
   [database                                                 ; :- s/Str
    type]                                                    ; :- document "type" value
+  ;; TODO we also want "universal" (for any db) webhooks
+  ;; TODO we want a filter on the webhook [:key #""] (regex), stored in hook document
   (ensure-webhooks)
   (cl/get-view @db osiris-design-doc :webhooks {:include_docs true :key [database type]}))
