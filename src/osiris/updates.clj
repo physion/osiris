@@ -59,7 +59,7 @@
 (defn process-changes
   "Process a seq of changes, assuming doc is included"
   [db docs]
-  (map (partial call-hooks db) docs))
+  (doall (map (partial call-hooks db) docs)))
 
 (defn process
   "Processes a single update of the form {:database db-name}"

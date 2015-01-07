@@ -38,21 +38,25 @@
   (ensure-db)
   (logging/debug "Creating webhooks view")
   (cl/save-view @db osiris-design-doc
-    (cl/view-server-fns :javascript
-      {:webhooks {:map
-                    "function(doc) {
-                      if(doc.type && doc.type==='webhook') {
-                        emit([doc.db, doc.trigger_type], null);
-                      }
-                    }"
-                 }}))
-  )
+                (cl/view-server-fns :javascript
+                                    {:db-webhooks {:map
+                                                   "function(doc) {
+                                                     if(doc.type && doc.type==='webhook') {
+                                                       emit([doc.db, doc.trigger_type], null);
+                                                     }
+                                                   }"
+                                                   }
+                                     :universal-webhooks {:map "function(doc) {
+                                                     if(doc.type && doc.type==='universal-webhook') {
+                                                       emit(doc.trigger_type, null);
+                                                     }
+                                                   }"}})))
 
 (defn watched-state
   [database-name]
   (ensure-db)
   (-> (cl/get-document @db database-name)
-    (cl/dissoc-meta)))
+      (cl/dissoc-meta)))
 
 
 (def database-state-type "database-state")
@@ -63,7 +67,7 @@
   (-> (if-let [doc (cl/get-document @db database-name)]
         (cl/put-document @db (assoc doc :last-seq last-seq :type database-state-type))
         (cl/put-document @db {:_id database-name :last-seq last-seq :type database-state-type}))
-    (cl/dissoc-meta)))
+      (cl/dissoc-meta)))
 
 (defn changes-since
   "Returns all database changes since the given sequence (a string) for the database db"
@@ -74,10 +78,14 @@
       (cl/changes url :since since :include_docs true))))
 
 (defn webhooks
-  "Gets all webhooks for the given database for updated documents with the given type"
+  "Gets all webhooks for the given database for updated documents with the given type.
+  If database is nil, gets only universal webhooks"
   [database                                                 ; :- s/Str
    type]                                                    ; :- document "type" value
-  ;; TODO we also want "universal" (for any db) webhooks
   ;; TODO we want a filter on the webhook [:key #""] (regex), stored in hook document
   (ensure-webhooks)
-  (cl/get-view @db osiris-design-doc :webhooks {:include_docs true :key [database type]}))
+  (if (nil? database)
+    (cl/get-view @db osiris-design-doc :universal-webhooks {:include_docs true :key [type]})
+    (concat
+      (cl/get-view @db osiris-design-doc :universal-webhooks {:include_docs true :key [type]})
+      (cl/get-view @db osiris-design-doc :db-webhooks {:include_docs true :key [database type]}))))
