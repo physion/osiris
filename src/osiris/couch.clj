@@ -39,15 +39,15 @@
   (logging/debug "Creating webhooks view")
   (cl/save-view @db osiris-design-doc
                 (cl/view-server-fns :javascript
-                                    {:db-webhooks {:map
-                                                   "function(doc) {
-                                                     if(doc.type && doc.type==='webhook') {
-                                                       emit([doc.db, doc.trigger_type], null);
-                                                     }
-                                                   }"
-                                                   }
+                                    {:db-webhooks        {:map
+                                                          "function(doc) {
+                                                            if(doc.type && doc.type==='webhook' && doc.db) {
+                                                              emit([doc.db, doc.trigger_type], null);
+                                                            }
+                                                          }"
+                                                          }
                                      :universal-webhooks {:map "function(doc) {
-                                                     if(doc.type && doc.type==='universal-webhook') {
+                                                     if(doc.type && doc.type==='webhook' && !doc.db) {
                                                        emit(doc.trigger_type, null);
                                                      }
                                                    }"}})))
