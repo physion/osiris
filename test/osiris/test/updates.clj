@@ -36,6 +36,18 @@
       (json/write-str {:doc_id ...id... :doc_rev ...rev... :hook_id ...hookid... :db ...db...}) => ...body...
       (sqs/send ...client... config/CALL_QUEUE ...body...) => {:id ...msg...}))
 
+  (fact "call-hook sets :deleted => true for doc :deleted => true"
+        (call-hook ...client... ...db... {:_id ...id... :_rev ...rev... :deleted true} {:_id ...hookid...}) => ...msg...
+        (provided
+          (json/write-str {:doc_id ...id... :doc_rev ...rev... :hook_id ...hookid... :db ...db... :deleted true}) => ...body...
+          (sqs/send ...client... config/CALL_QUEUE ...body...) => {:id ...msg...}))
+
+  (fact "call-hook sets :deleted => true for doc :_deleted => true"
+        (call-hook ...client... ...db... {:_id ...id... :_rev ...rev... :_deleted true} {:_id ...hookid...}) => ...msg...
+        (provided
+          (json/write-str {:doc_id ...id... :doc_rev ...rev... :hook_id ...hookid... :db ...db... :deleted true}) => ...body...
+          (sqs/send ...client... config/CALL_QUEUE ...body...) => {:id ...msg...}))
+
   (fact "call-hooks updates last seq"
     (call-hooks ...db... {:doc {:_id ...id... :type ...type...} :seq ...seq...}) => '(...result...)
     (provided

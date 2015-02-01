@@ -30,7 +30,8 @@
   "
   [client db doc hook]
   (logging/info "Calling hook" doc hook)
-  (let [msg {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:_id hook) :db db}]
+  (let [msg-base {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:_id hook) :db db}
+        msg (if (or (:deleted doc) (:_deleted doc)) (assoc msg-base :deleted true) msg-base)]
     (logging/info "Sending message" msg "to" config/CALL_QUEUE)
     (:id (sqs/send client config/CALL_QUEUE (json/write-str msg)))))
 
