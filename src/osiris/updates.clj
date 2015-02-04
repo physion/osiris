@@ -29,7 +29,7 @@
   "Queues a webhook call function for the given document and hook.
   "
   [client db doc hook]
-  (logging/info "Calling hook" doc hook)
+  (logging/info "Queueing hook call" doc hook)
   (let [msg-base {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:_id hook) :db db}
         msg (if (or (:deleted doc) (:_deleted doc)) (assoc msg-base :deleted true) msg-base)]
     (logging/info "Sending message" msg "to" config/CALL_QUEUE)
@@ -50,6 +50,7 @@
   (let [doc (:doc change)]
     (logging/info "Processing webhooks for" db ":" (:_id doc) "/" (:type doc))
     (let [hooks (webhooks db (:type doc))
+          _ (logging/info "Found" (count hooks) "webhooks for db" db)
           messages (map (partial call-hook client db doc) hooks)]
       (logging/info "Processed" (count messages) "messages for db" db)
       (last-seq! db (:seq change))

@@ -82,8 +82,8 @@
   If database is nil, gets only universal webhooks"
   [database                                                 ; :- s/Str
    type]                                                    ; :- document "type" value
-  ;; TODO we want a filter on the webhook [:key #""] (regex), stored in hook document
   (ensure-webhooks)
+
   (if (nil? database)
     (cl/get-view @db osiris-design-doc :universal-webhooks {:include_docs true :key [type]})
     (concat
