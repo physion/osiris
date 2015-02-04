@@ -48,7 +48,7 @@
   once with each _changes entry"
   [db change]
   (let [doc (:doc change)]
-    (logging/info "Processing webhooks for" db ":" (:_id doc) "of type" (:type doc))
+    (logging/info "Processing webhooks for" (:_id doc) "of type" (:type doc))
     (let [hooks (webhooks db (:type doc))
           _ (logging/info "Found" (count hooks) "webhooks for" (:_id doc))
           messages (map (partial call-hook client db doc) hooks)]

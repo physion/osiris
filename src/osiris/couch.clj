@@ -87,5 +87,5 @@
   (if (nil? database)
     (cl/get-view @db osiris-design-doc :universal-webhooks {:include_docs true :key [type]})
     (concat
-      (cl/get-view @db osiris-design-doc :universal-webhooks {:include_docs true :key [type]})
+      (cl/get-view @db osiris-design-doc :universal-webhooks {:include_docs true :key type})
       (cl/get-view @db osiris-design-doc :db-webhooks {:include_docs true :key [database type]}))))
