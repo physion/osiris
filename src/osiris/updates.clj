@@ -51,7 +51,7 @@
     (logging/info "Processing webhooks for" db ":" (:_id doc) "/" (:type doc))
     (let [hooks (webhooks db (:type doc))
           messages (map (partial call-hook client db doc) hooks)]
-      (logging/info "Messages:" messages)
+      (logging/info "Processed" (count messages) "messages for db" db)
       (last-seq! db (:seq change))
       (logging/info "Updated last-seq for" db ":" (:seq change))
       messages)))

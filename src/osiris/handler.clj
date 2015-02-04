@@ -36,5 +36,6 @@
                           (assoc :sqs-queue x-aws-sqsd-queue)
                           (assoc :sqs-first-received-at x-aws-sqsd-first-received-at)
                           (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))
+            _ (logging/info "Update received for" (:trigger_type update-info) "(" (:sqs-msgid update-info) ")")
             result (process update-info)]
         (ok {:messages (flatten result)})))))
