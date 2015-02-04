@@ -3,7 +3,6 @@
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer [ok]]
             [schema.core :as s]
-            [schema.coerce :as coerce]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
             [clojure.tools.logging :as logging]
@@ -38,4 +37,5 @@
                           (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))
             _ (logging/info "Update received for" (:trigger_type update-info) "(" (:sqs-msgid update-info) ")")
             result (process update-info)]
+        (logging/info "Osiris result" result (str result))
         (ok {:messages (flatten result)})))))
