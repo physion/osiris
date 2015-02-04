@@ -68,4 +68,4 @@
         (provided
           (couch-ready?) => true
           (cl/save-view anything osiris-design-doc anything) => true
-          (cl/get-view anything osiris-design-doc :universal-webhooks {:include_docs true :key [...type...]}) => ...result...)))
+          (cl/get-view anything osiris-design-doc :universal-webhooks {:include_docs true :key ...type...}) => ...result...)))
