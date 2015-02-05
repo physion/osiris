@@ -35,7 +35,7 @@
                           (assoc :sqs-queue x-aws-sqsd-queue)
                           (assoc :sqs-first-received-at x-aws-sqsd-first-received-at)
                           (assoc :sqs-receive-count (Integer/parseInt x-aws-sqsd-receive-count)))
-            _ (logging/info "[Osiris] Update received for" (:database update-info) "(" (:sqs-msgid update-info) ")")
+            _ (logging/info "Update received for" (:database update-info) "(" (:sqs-msgid update-info) ")")
             result (process update-info)]
-        (logging/info "[Osiris] result" result (str result))
+        (logging/info "Result" result (str result))
         (ok {:messages (flatten result)})))))
