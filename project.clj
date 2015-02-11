@@ -59,12 +59,10 @@
 
   :aws {:beanstalk {:stack-name   "64bit Amazon Linux running Tomcat 7"
                     :environments [{:name  "osiris-development"
-                                    :alias "development"
-                                    :env   {"OVATION_IO_HOST_URI" "https://dev.ovation.io"}}
+                                    :alias "development"}
 
                                    {:name  "osiris-production"
-                                    :alias "production"
-                                    :env   {"OVATION_IO_HOST_URI" "https://ovation.io"}}]}}
+                                    :alias "production"}]}}
 
   :profiles {:dev     {:dependencies [[javax.servlet/servlet-api "2.5"]
                                       [ring-mock "0.1.5"]
