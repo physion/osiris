@@ -52,21 +52,24 @@
   once with each _changes entry"
   [db change]
   (let [doc (:doc change)]
-    (logging/info "Processing webhooks for" (:_id doc) "of type" (:type doc))
-    (let [hooks (webhooks db (:type doc))
-          _ (logging/info "Found" (count hooks) "webhooks for" (:_id doc))
-          messages (map (partial call-hook client db doc) hooks)]
-      (logging/info "Processed" (count messages) "messages for db" db)
-      (last-seq! db (:seq change))
-      (logging/info "Updated last-seq for" db ":" (:seq change))
-      messages)))
+    (logging/debug "Processing webhooks for" (:_id doc) "of type" (:type doc))
+    (let [hooks (webhooks db (:type doc))]
+      (logging/debug "Found" (count hooks) "webhooks for" (:_id doc))
+      (try
+        (let [messages (map (partial call-hook client db doc) hooks)]
+
+          (logging/info "Processed" (count messages) "messages for db" db)
+          (last-seq! db (:seq change))
+          (logging/info "Updated last-seq for" db ":" (:seq change))
+          messages)
+        (catch JsonGenerationException ex {:error (.getMessage ex)})))))
 
 
 (defn process-changes
   "Process a seq of changes, assuming doc is included"
   [db docs]
-  (let [_ (logging/debug "process-changes start")
-        result (doall (map (partial call-hooks db) docs))]
+  (logging/debug "process-changes start")
+  (let [result (doall (map (partial call-hooks db) docs))]
     (logging/debug "process-changes complete")
     result))
 
