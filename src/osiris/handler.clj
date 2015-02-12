@@ -36,4 +36,6 @@
             ]
 
         (logging/info "Update received for" (:database update-info))
-        (ok {:messages (flatten (process update-info))})))))            ;;:messages (flatten result)
+        (let [result (process update-info)]
+          (logging/debug "Process results" result)
+          (ok {:messages (flatten result)}))))))            ;;:messages (flatten result)
