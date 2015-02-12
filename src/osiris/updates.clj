@@ -62,7 +62,10 @@
           (last-seq! db (:seq change))
           (logging/info "Updated last-seq for" db ":" (:seq change))
           messages)
-        (catch JsonGenerationException ex {:error (.getMessage ex)})))))
+        (catch JsonGenerationException ex
+          (do
+            (logging/error ex "Exception in call-hooks")
+            {:error (.getMessage ex)}))))))
 
 
 (defn process-changes
