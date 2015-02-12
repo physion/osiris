@@ -7,9 +7,10 @@
             [clojure.tools.logging :as logging]
             [cemerick.bandalore :as sqs]
             [clojure.data.json :as json]
-            [osiris.config :as config]))
+            [osiris.config :as config]
+            [osiris.logging]))
 
-
+(osiris.logging/setup!)
 
 (defn database-for-update
   [update]
