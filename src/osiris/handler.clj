@@ -2,18 +2,13 @@
   (:import (com.sun.xml.internal.bind.v2.model.core ID))
   (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer [ok]]
-            [schema.core :as s]
+            ;[schema.core :as s]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
             [clojure.tools.logging :as logging]
             [osiris.logging]))
 
 (osiris.logging/setup!)
-
-(defn init
-  "Servlet init"
-  []
-  (osiris.logging/setup!))
 
 
 ;; --- Routes --- ;;
@@ -32,8 +27,7 @@
       ;                x-aws-sqsd-first-received-at :- s/Str
       ;                x-aws-sqsd-receive-count :- s/Str]
 
-      (let [__ (logging/info "Update received")
-            update-info  update
+      (let [update-info  update
             ;(-> update
             ;              (assoc :sqs-msgid x-aws-sqsd-msgid)
             ;              (assoc :sqs-queue x-aws-sqsd-queue)
