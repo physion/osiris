@@ -8,7 +8,8 @@
             [cemerick.bandalore :as sqs]
             [clojure.data.json :as json]
             [osiris.config :as config]
-            [osiris.logging]))
+            [osiris.logging])
+  (:import (com.fasterxml.jackson.core JsonGenerationException)))
 
 (osiris.logging/setup!)
 
@@ -34,7 +35,9 @@
   (let [msg-base {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:id hook) :db db}
         msg (if (or (:deleted doc) (:_deleted doc)) (assoc msg-base :deleted true) msg-base)]
     (logging/info "Sending message" msg "to" config/CALL_QUEUE)
-    (:id (sqs/send client config/CALL_QUEUE (json/write-str msg)))))
+    (try
+      (:id (sqs/send client config/CALL_QUEUE (json/write-str msg)))
+      (catch JsonGenerationException ex {:error (.getMessage ex)}))))
 
 (defn ensure-queue
   "Ensures the config/CALL_QUEUE queue is created"
@@ -62,9 +65,9 @@
 (defn process-changes
   "Process a seq of changes, assuming doc is included"
   [db docs]
-  (let [_ (logging/info "process-changes start")
+  (let [_ (logging/debug "process-changes start")
         result (doall (map (partial call-hooks db) docs))]
-    (logging/info "process-changes complete")
+    (logging/debug "process-changes complete")
     result))
 
 (defn process
