@@ -8,6 +8,8 @@
             [clojure.tools.logging :as logging]
             [osiris.logging]))
 
+(osiris.logging/setup!)
+
 (defn init
   "Servlet init"
   []
