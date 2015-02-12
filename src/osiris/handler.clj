@@ -39,4 +39,4 @@
         (let [result (process update-info)]
           (logging/info "Update processed" (:database update-info))
           (logging/info "Messages" (:database update-info) result)
-          (ok {:messages []}))))))
+          (ok {:messages (flatten result)}))))))
