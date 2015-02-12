@@ -11,7 +11,8 @@
 (defn init
   "Servlet init"
   []
-  (osiris.logging/setup!))
+  (osiris.logging/setup!)
+  (logging/debug "Logging configured"))
 
 
 ;; --- Routes --- ;;
