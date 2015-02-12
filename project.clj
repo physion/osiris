@@ -49,7 +49,8 @@
   :plugins [[lein-ring "0.8.12"]
             [lein-midje "3.1.3"]
             [lein-elastic-beanstalk "0.2.8-SNAPSHOT"]
-            [lein-awsuberwar "0.1.0"]]
+            [lein-awsuberwar "0.1.0"]
+            [lein-kibit "0.0.8"]]
 
   :ring {:handler osiris.handler/app}                                                  ;
 
