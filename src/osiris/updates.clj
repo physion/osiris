@@ -37,7 +37,10 @@
     (logging/info "Sending message" msg "to" config/CALL_QUEUE)
     (try
       (:id (sqs/send client config/CALL_QUEUE (json/write-str msg)))
-      (catch JsonGenerationException ex {:error (.getMessage ex)}))))
+      (catch JsonGenerationException ex
+        (do
+          (logging/error ex "Error seding sqs message")
+          {:error (.getMessage ex)})))))
 
 (defn ensure-queue
   "Ensures the config/CALL_QUEUE queue is created"
