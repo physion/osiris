@@ -19,9 +19,9 @@
 (defapi app
   (swaggered "osiris"
     (HEAD* "/" []
-      (ok ""))
+      (ok {}))
     (GET* "/" []
-      (ok "Osiris!"))
+      (ok {}))
 
     (POST* "/updates" []
       :body [update NewUpdate]
