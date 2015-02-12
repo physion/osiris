@@ -37,5 +37,6 @@
 
         (logging/info "Update received for" (:database update-info))
         (let [result (process update-info)]
-          (logging/debug "Process results" result)
+          (logging/info "Update processed" (:database update-info))
+          (logging/info "Messages" (:database update-info) result)
           (ok {:messages []}))))))
