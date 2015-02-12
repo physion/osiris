@@ -39,7 +39,6 @@
 (defn ensure-webhooks
   []
   (ensure-db)
-  (logging/debug "Creating webhooks view")
   (cl/save-view @db osiris-design-doc
                 (cl/view-server-fns :javascript
                                     {:db-webhooks        {:map

@@ -30,7 +30,7 @@
   "Queues a webhook call function for the given document and hook.
   "
   [client db doc hook]
-  (logging/info "Queueing hook call" doc hook)
+  (logging/debug "Queueing hook call" doc hook)
   (let [msg-base {:doc_id (:_id doc) :doc_rev (:_rev doc) :hook_id (:id hook) :db db}
         msg (if (or (:deleted doc) (:_deleted doc)) (assoc msg-base :deleted true) msg-base)]
     (logging/info "Sending message" msg "to" config/CALL_QUEUE)
@@ -62,7 +62,9 @@
 (defn process-changes
   "Process a seq of changes, assuming doc is included"
   [db docs]
-  (doall (map (partial call-hooks db) docs)))
+  (let [result (doall (map (partial call-hooks db) docs))]
+    (logging/info "process-changes complete")
+    result))
 
 (defn process
   "Processes a single update of the form {:database db-name}"
