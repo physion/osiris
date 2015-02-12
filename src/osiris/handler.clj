@@ -38,4 +38,4 @@
         (logging/info "Update received for" (:database update-info))
         (let [result (process update-info)]
           (logging/debug "Process results" result)
-          (ok {:messages (flatten result)}))))))            ;;:messages (flatten result)
+          (ok {:messages []}))))))
