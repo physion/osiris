@@ -40,4 +40,4 @@
             _ (logging/info "Update received for" (:database update-info) "(" (:sqs-msgid update-info) ")")
             result (process update-info)]
         (logging/info "Result" result (str result))
-        (ok {:messages (flatten result)})))))
+        (ok {:success true})))))                            ;;:messages (flatten result)
