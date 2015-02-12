@@ -62,7 +62,8 @@
 (defn process-changes
   "Process a seq of changes, assuming doc is included"
   [db docs]
-  (let [result (doall (map (partial call-hooks db) docs))]
+  (let [_ (logging/info "process-changes start")
+        result (doall (map (partial call-hooks db) docs))]
     (logging/info "process-changes complete")
     result))
 
