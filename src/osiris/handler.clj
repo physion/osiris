@@ -30,7 +30,8 @@
                       x-aws-sqsd-first-received-at :- s/Str
                       x-aws-sqsd-receive-count :- s/Str]
 
-      (let [update-info (-> update
+      (let [__ (logging/info "Update received")
+            update-info (-> update
                           (assoc :sqs-msgid x-aws-sqsd-msgid)
                           (assoc :sqs-queue x-aws-sqsd-queue)
                           (assoc :sqs-first-received-at x-aws-sqsd-first-received-at)
