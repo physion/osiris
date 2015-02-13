@@ -74,10 +74,7 @@
 (defn process-changes
   "Process a seq of changes, assuming doc is included"
   [db docs]
-  (logging/debug "process-changes start")
-  (let [result (doall (map (partial call-hooks db) docs))]
-    (logging/debug "process-changes complete")
-    result))
+  (doall (map (partial call-hooks db) docs))
 
 (defn process
   "Processes a single update of the form {:database db-name}"
