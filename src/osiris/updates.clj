@@ -80,7 +80,8 @@
   "Processes a single update of the form {:database db-name}"
   [update]
   (let [db (database-for-update update)]
-    (when (not (= db osiris.config/COUCH_DATABASE))
+    (when (and (not= db "_replicator")
+               (not= db osiris.config/COUCH_DATABASE))
       (logging/info "Processing changes for" db)
       (ensure-queue)
       (process-changes db (changes-for-update update)))))
