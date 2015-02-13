@@ -1,7 +1,7 @@
 (ns osiris.handler
   (:import (com.sun.xml.internal.bind.v2.model.core ID))
   (:require [compojure.api.sweet :refer :all]
-            [ring.util.http-response :refer [ok]]
+            [ring.util.http-response :refer [ok no-content]]
             ;[schema.core :as s]
             [osiris.updates :refer [process]]
             [osiris.schema :refer [NewUpdate]]
@@ -39,4 +39,6 @@
         (let [result (process update-info)]
           (logging/info "Update processed" (:database update-info))
           (logging/info "Messages" (:database update-info) result)
-          (ok {:messages (flatten result)}))))))
+          ;(ok {:messages (flatten result)})
+          (no-content)
+          )))))

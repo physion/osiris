@@ -20,7 +20,7 @@
                  (content-type "application/json")
                  (body "{\"database\" : \"my-database\"}"))]
 
-      (:status (handler/app post)) => 200
+      (:status (handler/app post)) => 204
       (provided
         (osiris.updates/process anything) => ())))
   )
