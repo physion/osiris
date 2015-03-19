@@ -10,6 +10,7 @@
 
 (osiris.logging/setup!)
 
+(logging/info "Starting Osiris handler")
 
 ;; --- Routes --- ;;
 (defapi app
