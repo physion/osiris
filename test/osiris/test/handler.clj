@@ -22,5 +22,5 @@
 
       (:status (handler/app post)) => 200
       (provided
-        (osiris.updates/process anything) => ())))
+        (osiris.updates/process anything) => {:success true})))
   )
