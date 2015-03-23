@@ -13,4 +13,5 @@
              (.setName "osiris"))) ;             (org.apache.log4j.PatternLayout. "%p: (%F:%L) %x %m %n")
 
     (log-config/set-logger!
-      :level :debug)))
+      :level :debug
+      :out (org.apache.log4j.ConsoleAppender. (org.apache.log4j.SimpleLayout.)))))
