@@ -34,6 +34,7 @@
                                 ]
 
                             (logging/info "Update received for" (:database update-info))
-                            (let [result (process update-info)]
-                              (logging/info "Update processed" (:database update-info))
-                              (ok {:success true}))))))
+                            (process update-info)
+                            (logging/info "Update processed" (:database update-info))
+                            (ok {:success true})
+                            ))))
