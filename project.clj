@@ -5,15 +5,7 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/core.incubator "0.1.3"]
 
-                 [compojure "1.1.8"]
-                 [metosin/compojure-api "0.16.2"]
-                 [prismatic/schema "0.2.4"]
-                 [prismatic/plumbing "0.3.3"]
-                 [metosin/ring-swagger "0.13.0"]
-                 [metosin/ring-swagger-ui "2.0.17"]
-                 [metosin/ring-http-response "0.5.0"]
-
-                 [ring.middleware.logger "0.5.0"]
+                 [metosin/compojure-api "0.18.0"]
 
                  [ring/ring-servlet "1.3.1"]
                  [javax.servlet/servlet-api "2.5"]
@@ -38,10 +30,6 @@
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]
 
-                 ;[org.apache.logging.log4j/log4j-slf4j-impl "2.0.2"]
-                 ;[org.apache.logging.log4j/log4j-api "2.0.2"]
-                 ;[org.apache.logging.log4j/log4j-core "2.0.2"]
-
                  [com.cemerick/bandalore "0.0.6"]]
 
   ;:java-agents [[com.newrelic.agent.java/newrelic-agent "3.9.0"]]
@@ -52,7 +40,8 @@
             [lein-awsuberwar "0.1.0"]
             [lein-kibit "0.0.8"]]
 
-  :ring {:handler osiris.handler/app}                                                  ;
+  :ring {:handler osiris.handler/app
+         :init osiris.handler/init}
 
 
   ;; For New Relic, we need to bundle newrelic.yml and newrelic.jar

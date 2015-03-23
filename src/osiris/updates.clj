@@ -36,7 +36,8 @@
         msg (if (or (:deleted doc) (:_deleted doc)) (assoc msg-base :deleted true) msg-base)]
     (logging/info "Sending message" msg "to" config/CALL_QUEUE)
     (try
-      (:id (sqs/send client config/CALL_QUEUE (json/write-str msg)))
+      (let [msgid (:id (sqs/send client config/CALL_QUEUE (json/write-str msg)))]
+        (logging/debug "Posted msg" msgid))
       (catch JsonGenerationException ex
         (do
           (logging/error ex "Error seding sqs message")

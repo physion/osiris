@@ -16,6 +16,6 @@
                       password
                       "boom!"))
 
-(def CALL_QUEUE (System/getProperty "CALL_SQS_QUEUE"))
+(def CALL_QUEUE (or (System/getenv "CALL_SQS_QUEUE") (System/getProperty "CALL_SQS_QUEUE")))
 
-(def LOGGING_HOST (System/getProperty "LOGGING_HOST"))
+(def LOGGING_HOST (or (System/getenv "LOGGING_HOST") (System/getProperty "LOGGING_HOST")))
