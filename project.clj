@@ -40,8 +40,7 @@
             [lein-awsuberwar "0.1.0"]
             [lein-kibit "0.0.8"]]
 
-  :ring {:handler osiris.handler/app
-         :init osiris.handler/init}
+  :ring {:handler osiris.handler/app}
 
 
   ;; For New Relic, we need to bundle newrelic.yml and newrelic.jar

@@ -7,9 +7,8 @@
             [clojure.tools.logging :as logging]
             [osiris.logging]))
 
-(defn init []
-  (osiris.logging/setup!)
-  (logging/info "Starting Osiris handler"))
+(osiris.logging/setup!)
+(logging/info "Starting Osiris handler")
 
 ;; --- Routes --- ;;
 (defapi app
