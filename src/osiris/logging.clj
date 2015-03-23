@@ -11,5 +11,4 @@
              log-host
              org.apache.log4j.net.SyslogAppender/LOG_LOCAL7))
     (log-config/set-logger!
-      :level :debug
-      :out (org.apache.log4j.ConsoleAppender.))))
+      :level :debug)))
