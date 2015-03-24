@@ -100,6 +100,7 @@
         (cl/changes url :include_docs true)
         (cl/changes url :since since :include_docs true))
       (catch IllegalStateException _
+        (logging/info (str "Ignoring missing _changes feed" url))
         '()))))
 
 (defn webhooks
