@@ -1,7 +1,6 @@
 (ns osiris.couch
   (:require [com.ashafa.clutch :as cl]
             [osiris.config :as config]
-            [schema.core :as s]
             [clojure.tools.logging :as logging]
             [osiris.logging]
             [slingshot.slingshot :refer [try+]]))
@@ -73,14 +72,16 @@
 
   (loop [doc nil]
     (if (nil? doc)
-      (recur (try+
-               ;; PUT/POST document
-               (if-let [doc (cl/get-document @db doc-id)]
-                 (cl/put-document @db (conj doc update-map))
-                 (cl/put-document @db (assoc update-map :_id doc-id)))
+      (recur                                                ;; Re-loop
+        (try+
+          ;; PUT/POST document
+          (if-let [doc (cl/get-document @db doc-id)]
+            (cl/put-document @db (conj doc update-map))
+            (cl/put-document @db (assoc update-map :_id doc-id)))
 
-               (catch [:status 409] _ ;; Document update conflict
-                 doc)))
+          (catch [:status 409] _                            ;; Document update conflict
+            (logging/debug (str "Retrying update for" doc-id "(document update conflict)"))
+            doc)))
 
       doc)))
 
