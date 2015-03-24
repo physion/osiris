@@ -40,7 +40,11 @@
                                                    }"}}))
 
 (defn update-view! []
-  (cl/save-view @db osiris-design-doc view-fns))
+  (try+
+    (if (nil? (cl/get-document @db (str "_design/" osiris-design-doc)))
+      (cl/save-view @db osiris-design-doc view-fns))
+    (catch [:status 409] _
+      (logging/info "View update failed (409)"))))
 
 (defn ensure-db
   []
