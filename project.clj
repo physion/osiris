@@ -47,7 +47,7 @@
   :war-resources-path "war-resources"
 
   :aws {:beanstalk {:stack-name   "64bit Amazon Linux running Tomcat 7"
-                    :environments [{:name  "osiris-development-1"
+                    :environments [{:name  "osiris-development-2"
                                     :alias "development"}
 
                                    {:name  "osiris-production-1"
