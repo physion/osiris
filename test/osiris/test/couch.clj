@@ -47,18 +47,18 @@
       (cl/changes ...db... :include_docs true) => ...all...)))
 
 (facts "About database creation"
-  (fact "creates database when not checked"
+  (fact "creates database and view when not checked"
     (ensure-db) => ...meta...
     (provided
       (couch-ready?) => false
-      (cl/get-database anything) => ...meta...)))
+      (cl/get-database anything) => ...meta...
+      (update-view!) => ...view...)))
 
 (facts "About webhooks"
   (fact "Retrieves webhooks by [database,type]"
     (webhooks ...db... ...type...) => ...result...
     (provided
       (couch-ready?) => true
-      (cl/save-view anything osiris-design-doc anything) => true
       (cl/get-view anything osiris-design-doc :db-webhooks {:include_docs true :key [...db... ...type...]}) => ...dbhooks...
       (cl/get-view anything osiris-design-doc :universal-webhooks {:include_docs true :key ...type...}) => ...universalhooks...
       (concat ...universalhooks... ...dbhooks...) => ...result...))
@@ -67,5 +67,5 @@
         (webhooks nil ...type...) => ...result...
         (provided
           (couch-ready?) => true
-          (cl/save-view anything osiris-design-doc anything) => true
-          (cl/get-view anything osiris-design-doc :universal-webhooks {:include_docs true :key ...type...}) => ...result...)))
+          (cl/get-view anything osiris-design-doc :universal-webhooks {:include_docs true :key ...type...}) => ...result...))
+  )

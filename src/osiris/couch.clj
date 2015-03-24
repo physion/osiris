@@ -6,8 +6,6 @@
             [osiris.logging]))
 
 
-(osiris.logging/setup!)
-
 (defn database
   "Constructs a database URL for the given database name. Other parameters are pulled from config."
   [db-name]
@@ -27,32 +25,36 @@
 
 (def osiris-design-doc "osiris")
 
-(defn ensure-db
-  []
-  (if (not (couch-ready?))
-    (do
-      (logging/debug "Checking database" (dissoc @db :username :password))
-      (let [meta (cl/get-database @db)]
-        (swap! token not)
-        meta))))
-
-(defn ensure-webhooks
-  []
-  (ensure-db)
-  (cl/save-view @db osiris-design-doc
-                (cl/view-server-fns :javascript
-                                    {:db-webhooks        {:map
-                                                          "function(doc) {
-                                                            if(doc.type && doc.type==='webhook' && doc.db) {
-                                                              emit([doc.db, doc.trigger_type], null);
-                                                            }
-                                                          }"
+(def view-fns (cl/view-server-fns :javascript
+                                  {:db-webhooks        {:map
+                                                        "function(doc) {
+                                                          if(doc.type && doc.type==='webhook' && doc.db) {
+                                                            emit([doc.db, doc.trigger_type], null);
                                                           }
-                                     :universal-webhooks {:map "function(doc) {
+                                                        }"
+                                                        }
+                                   :universal-webhooks {:map "function(doc) {
                                                      if(doc.type && doc.type==='webhook' && !doc.db) {
                                                        emit(doc.trigger_type, null);
                                                      }
-                                                   }"}})))
+                                                   }"}}))
+
+(defn update-view! []
+  (cl/save-view @db osiris-design-doc view-fns))
+
+(defn ensure-db
+  []
+  (when (not (couch-ready?))
+    (do
+      (logging/debug "Checking database" (dissoc @db :username :password))
+      (let [meta (cl/get-database @db)
+            view (update-view!)] ;
+        (swap! token not)
+        (and view meta)))))
+
+(defn ensure-webhooks
+  []
+  (ensure-db))
 
 (defn watched-state
   [database-name]
