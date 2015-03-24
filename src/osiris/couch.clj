@@ -3,7 +3,8 @@
             [osiris.config :as config]
             [schema.core :as s]
             [clojure.tools.logging :as logging]
-            [osiris.logging]))
+            [osiris.logging]
+            [slingshot.slingshot :refer [try+]]))
 
 
 (defn database
@@ -48,7 +49,7 @@
     (do
       (logging/debug "Checking database" (dissoc @db :username :password))
       (let [meta (cl/get-database @db)
-            view (update-view!)] ;
+            view (update-view!)]                            ;
         (swap! token not)
         (and view meta)))))
 
@@ -65,12 +66,29 @@
 
 (def database-state-type "database-state")
 
+(defn update-document!
+  "Creates or updates the document with doc-id"
+
+  [db doc-id update-map]
+
+  (loop [doc nil]
+    (if (nil? doc)
+      (recur (try+
+               ;; PUT/POST document
+               (if-let [doc (cl/get-document @db doc-id)]
+                 (cl/put-document @db (conj doc update-map))
+                 (cl/put-document @db (assoc update-map :_id doc-id)))
+
+               (catch [:status 409] _ ;; Document update conflict
+                 doc)))
+
+      doc)))
+
+
 (defn set-watched-state!
   [database-name last-seq]
   (ensure-db)
-  (-> (if-let [doc (cl/get-document @db database-name)]
-        (cl/put-document @db (assoc doc :last-seq last-seq :type database-state-type))
-        (cl/put-document @db {:_id database-name :last-seq last-seq :type database-state-type}))
+  (-> (update-document! db database-name {:last-seq last-seq :type database-state-type})
       (cl/dissoc-meta)))
 
 (defn changes-since
