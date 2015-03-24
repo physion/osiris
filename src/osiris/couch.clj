@@ -95,9 +95,12 @@
   "Returns all database changes since the given sequence (a string) for the database db"
   [db-name since]
   (let [url (database db-name)]
-    (if (nil? since)
-      (cl/changes url :include_docs true)
-      (cl/changes url :since since :include_docs true))))
+    (try+
+      (if (nil? since)
+        (cl/changes url :include_docs true)
+        (cl/changes url :since since :include_docs true))
+      (catch IllegalStateException _
+        '()))))
 
 (defn webhooks
   "Gets all webhooks for the given database for updated documents with the given type.
