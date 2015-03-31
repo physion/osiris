@@ -97,6 +97,7 @@
 
           (catch [:status 409] _                            ;; Document update conflict
             (logging/debug (str "Retrying update for" doc-id "(document update conflict)"))
+            (Thread/sleep 1000)
             doc)))
 
       doc)))
