@@ -91,7 +91,7 @@
       (recur                                                ;; Re-loop
         (try+
           ;; PUT/POST document
-          (if-let [doc (cl/get-document @db doc-id {:conflicts true})]
+          (if-let [doc (cl/get-document @db doc-id :conflicts true)]
             (cl/put-document @db (conj doc update-map))
             (update! @db doc update-map))
 

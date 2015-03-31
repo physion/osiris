@@ -20,7 +20,7 @@
     (set-watched-state! ...database... ...last...) => {:last-seq ...last...}
     (provided
       (couch-ready?) => true
-      (cl/get-document anything ...database... {:conflicts true}) => {:_id      "id",
+      (cl/get-document anything ...database... :conflicts true) => {:_id      "id",
                                                                       :_rev     "rev",
                                                                       :last-seq ...other...}
       (cl/put-document anything (contains {:last-seq ...last...})) => {:_id      "new-id"
@@ -32,7 +32,7 @@
     (set-watched-state! ...database... ...last...) =future=> {:last-seq ...last...}
     (provided
       (couch-ready?) => true
-      (cl/get-document anything ...database... {:conflicts true}) => {:_id      "id",
+      (cl/get-document anything ...database... :conflicts true) => {:_id      "id",
                                                     :_rev     "rev",
                                                     :last-seq ...other...} :times 2
 
@@ -46,7 +46,7 @@
     (set-watched-state! ...database... ...last...) => {:last-seq ...last...}
     (provided
       (couch-ready?) => true
-      (cl/get-document anything ...database... {:conflicts true}) => nil
+      (cl/get-document anything ...database... :conflicts true) => nil
       (cl/put-document anything (contains {:last-seq ...last...})) => {:_id      "new-id"
                                                                        :_rev     "rev-2"
                                                                        :last-seq ...last...}
