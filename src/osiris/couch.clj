@@ -3,7 +3,8 @@
             [osiris.config :as config]
             [clojure.tools.logging :as logging]
             [osiris.logging]
-            [slingshot.slingshot :refer [try+]]))
+            [slingshot.slingshot :refer [try+]]
+            [again.core :as again]))
 
 
 (defn database
@@ -81,15 +82,21 @@
 
   (cl/put-document dburl (merge (dissoc doc :_conflicts) update-map)))
 
+(def exponential-backoff-strategy (again/max-delay 10000
+                                      (again/randomize-strategy 0.5
+                                        (again/multiplicative-strategy 100 2))))
+
 (defn update-document!
   "Creates or updates the document with doc-id"
 
-  [db doc-id update-map & {:keys [retry] :or {retry 0}}]
+  [db doc-id update-map]
 
-  ;; PUT/POST document
-  (if-let [doc (cl/get-document @db doc-id :conflicts true)]
-    (update! @db doc update-map)
-    (cl/put-document @db (assoc update-map :_id doc-id))))
+
+  (again/with-retries exponential-backoff-strategy
+    ;; PUT/POST document
+    (if-let [doc (cl/get-document @db doc-id :conflicts true)]
+      (update! @db doc update-map)
+      (cl/put-document @db (assoc update-map :_id doc-id)))))
 
 
 (defn set-watched-state!
