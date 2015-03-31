@@ -26,14 +26,14 @@
 (def osiris-design-doc "osiris")
 
 (def view-fns (cl/view-server-fns :javascript
-                                  {:db-webhooks        {:map
-                                                        "function(doc) {
-                                                          if(doc.type && doc.type==='webhook' && doc.db) {
-                                                            emit([doc.db, doc.trigger_type], null);
-                                                          }
-                                                        }"
-                                                        }
-                                   :universal-webhooks {:map "function(doc) {
+                {:db-webhooks        {:map
+                                      "function(doc) {
+                                        if(doc.type && doc.type==='webhook' && doc.db) {
+                                          emit([doc.db, doc.trigger_type], null);
+                                        }
+                                      }"
+                                      }
+                 :universal-webhooks {:map "function(doc) {
                                                      if(doc.type && doc.type==='webhook' && !doc.db) {
                                                        emit(doc.trigger_type, null);
                                                      }
@@ -64,10 +64,22 @@
   [database-name]
   (ensure-db)
   (-> (cl/get-document @db database-name)
-      (cl/dissoc-meta)))
+    (cl/dissoc-meta)))
 
 
 (def database-state-type "database-state")
+
+(defn update!
+  [dburl doc update-map & {:keys [resolve_conflicts] :or {resolve_conflicts true}}]
+
+  (if-let [conflicts (:_conflicts doc)]
+    (when resolve_conflicts
+      (let [bulk (map (fn [conflict] {:_id      (:_id doc)
+                                      :_rev     conflict
+                                      :_deleted true}) conflicts)]
+        (cl/bulk-update dburl bulk))))
+
+  (cl/put-document dburl (merge (dissoc doc :_conflicts) update-map)))
 
 (defn update-document!
   "Creates or updates the document with doc-id"
@@ -79,9 +91,9 @@
       (recur                                                ;; Re-loop
         (try+
           ;; PUT/POST document
-          (if-let [doc (cl/get-document @db doc-id)]
+          (if-let [doc (cl/get-document @db doc-id {:conflicts true})]
             (cl/put-document @db (conj doc update-map))
-            (cl/put-document @db (assoc update-map :_id doc-id)))
+            (update! @db doc update-map))
 
           (catch [:status 409] _                            ;; Document update conflict
             (logging/debug (str "Retrying update for" doc-id "(document update conflict)"))
@@ -94,7 +106,7 @@
   [database-name last-seq]
   (ensure-db)
   (-> (update-document! db database-name {:last-seq last-seq :type database-state-type})
-      (cl/dissoc-meta)))
+    (cl/dissoc-meta)))
 
 (defn changes-since
   "Returns all database changes since the given sequence (a string) for the database db"
