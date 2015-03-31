@@ -84,23 +84,12 @@
 (defn update-document!
   "Creates or updates the document with doc-id"
 
-  [db doc-id update-map]
+  [db doc-id update-map & {:keys [retry] :or {retry 0}}]
 
-  (loop [doc nil]
-    (if (nil? doc)
-      (recur                                                ;; Re-loop
-        (try+
-          ;; PUT/POST document
-          (if-let [doc (cl/get-document @db doc-id :conflicts true)]
-            (cl/put-document @db (conj doc update-map))
-            (update! @db doc update-map))
-
-          (catch [:status 409] _                            ;; Document update conflict
-            (logging/debug (str "Retrying update for" doc-id "(document update conflict)"))
-            (Thread/sleep 1000)
-            doc)))
-
-      doc)))
+  ;; PUT/POST document
+  (if-let [doc (cl/get-document @db doc-id :conflicts true)]
+    (update! @db doc update-map)
+    (cl/put-document @db (assoc update-map :_id doc-id))))
 
 
 (defn set-watched-state!
