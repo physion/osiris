@@ -88,11 +88,11 @@
 (defn set-watched-state!
   [database-name last-seq]
   (ensure-db)
-  (let [doc (cl/put-document @db (state-document-id database-name) {:last-seq  last-seq
-                                                                         :type      database-state-type
-                                                                         :database  database-name
-                                                                         :timestamp (tc/to-long (time/now))})]
-    {::last-seq (:last-seq doc)}))
+  (let [doc (cl/put-document @db (state-document-id database-name) {:last_seq  last-seq
+                                                                    :type      database-state-type
+                                                                    :database  database-name
+                                                                    :timestamp (tc/to-long (time/now))})]
+    {::last-seq (:last_seq doc)}))
 
 (defn changes-since
   "Returns all database changes since the given sequence (a string) for the database db"
