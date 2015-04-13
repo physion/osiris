@@ -7,7 +7,7 @@
 (defn last-seq
   "Gets the last processed _changes seq for a database name"
   [database]
-  (:last-seq (c/watched-state database)))
+  (:osiris.couch/last-seq (c/watched-state database)))
 
 (defn last-seq!
   "Updates the last processed _changes seq for a database name"

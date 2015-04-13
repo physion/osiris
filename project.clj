@@ -15,6 +15,8 @@
                  [com.ashafa/clutch "0.4.0"]
                  [com.cemerick/url "0.1.1"]                 ;; For clutch
 
+                 [clj-time "0.9.0"]
+
                  [com.newrelic.agent.java/newrelic-agent "3.11.0"] ;; NB Update javaagent string
                  [com.newrelic.agent.java/newrelic-api "3.11.0"] ;; NB Update javaagent string
 

@@ -1,7 +1,9 @@
 (ns osiris.test.couch
   (:require [midje.sweet :refer :all]
             [osiris.couch :refer :all]
-            [com.ashafa.clutch :as cl]))
+            [com.ashafa.clutch :as cl]
+            [clj-time.core :as time]
+            [clj-time.coerce :as tc]))
 
 (defn slingshot-exception
   [exception-map]
@@ -10,59 +12,30 @@
 
 (facts "About watched database state"
   (fact "gets state document for named database"
-    (watched-state ...database...) => {:last-seq ...last...}
+    (watched-state ...database...) => {:osiris.couch/last-seq ...last...}
     (provided
       (couch-ready?) => true
-      (cl/get-document anything ...database...) => {:_id      "id",
-                                                    :_rev     "rev",
-                                                    :last-seq ...last...}))
-  (fact "sets state document for named database with existing state document"
-    (set-watched-state! ...database... ...last...) => {:last-seq ...last...}
+      (cl/get-view anything "state" :last-seq {:startkey   [...database... {}]
+                                               :limit      1
+                                               :descending true}) => {:rows [{:value ...last...}]}))
+
+  ;;BEGIN TODO
+  (fact "`set-watched-state!` sets state document for named database with existing state document"
+    (set-watched-state! ...database... ...last...) => {:osiris.couch/last-seq ...last...}
     (provided
       (couch-ready?) => true
-      (cl/get-document anything ...database... :conflicts true) => {:_id      "id",
-                                                                      :_rev     "rev",
-                                                                      :last-seq ...other...}
-      (cl/put-document anything (contains {:last-seq ...last...})) => {:_id      "new-id"
-                                                                       :_rev     "rev-2"
-                                                                       :last-seq ...last...}
+      (time/now) => ...now...
+      (tc/to-long ...now...) => ...ts...
+      (state-document-id ...database...) => ...id...
+      (cl/put-document anything ...id... (contains {:last-seq  ...last...
+                                                    :database  ...database...
+                                                    :type      database-state-type
+                                                    :timestamp ...ts...})) => {:_id      "new-id"
+                                                                               :_rev     "rev-2"
+                                                                               :last-seq ...last...}
       ))
 
-  (fact "`set-watched-state!` retries state update on document update conflict (409)"
-    (set-watched-state! ...database... ...last...) =future=> {:last-seq ...last...}
-    (provided
-      (couch-ready?) => true
-      (cl/get-document anything ...database... :conflicts true) => {:_id      "id",
-                                                    :_rev     "rev",
-                                                    :last-seq ...other...} :times 2
-
-      (cl/put-document anything (contains {:last-seq ...last...})) =throws=> (slingshot-exception {:state 409}) :times 1
-      (cl/put-document anything (contains {:last-seq ...last...})) => {:_id      "new-id"
-                                                                       :_rev     "rev-2"
-                                                                       :last-seq ...last...}
-      ))
-
-  (fact "sets state document for named database without existing state document"
-    (set-watched-state! ...database... ...last...) => {:last-seq ...last...}
-    (provided
-      (couch-ready?) => true
-      (cl/get-document anything ...database... :conflicts true) => nil
-      (cl/put-document anything (contains {:last-seq ...last...})) => {:_id      "new-id"
-                                                                       :_rev     "rev-2"
-                                                                       :last-seq ...last...}
-      ))
-
-  (fact "update! resolves document conflicts"
-    (let [id "doc-id"]
-      (let [doc {:_id        id
-                 :_rev       ...r3...
-                 :_conflicts [...c1... ...c2...]}
-            expected-update (dissoc doc :_conflicts)]
-        (update! ...database... doc {} :resolve_conflicts true) => ...result...
-        (provided
-          (cl/bulk-update ...database... (just #{{:_id id :_rev ...c1... :_deleted true}
-                                                 {:_id id :_rev ...c2... :_deleted true}})) => anything
-          (cl/put-document ...database... expected-update) => ...result...)))))
+  )
 
 
 (facts "About _changes feed"

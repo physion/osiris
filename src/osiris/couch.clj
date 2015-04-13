@@ -4,7 +4,10 @@
             [clojure.tools.logging :as logging]
             [osiris.logging]
             [slingshot.slingshot :refer [try+]]
-            [again.core :as again]))
+            [again.core :as again]
+            [clj-time.core :as time]
+            [clj-time.coerce :as tc])
+  (:import (java.util UUID)))
 
 
 (defn database
@@ -25,6 +28,8 @@
   @token)
 
 (def osiris-design-doc "osiris")
+(def state-design-doc "state")
+(def last-seq-view :last-seq)
 
 (def view-fns (cl/view-server-fns :javascript
                 {:db-webhooks        {:map
@@ -62,48 +67,32 @@
   (ensure-db))
 
 (defn watched-state
+  "Gets the last observed database seq for the given database.
+
+  NOTE: this depends on the view defined in aker.js!!"
   [database-name]
   (ensure-db)
-  (-> (cl/get-document @db database-name)
-    (cl/dissoc-meta)))
+  (let [rows (:rows (cl/get-view @db state-design-doc last-seq-view {:startkey   [database-name {}]
+                                                                     :descending true
+                                                                     :limit      1}))]
+    (when (not (empty? rows))
+      {::last-seq (:value (first rows))})))
 
 
 (def database-state-type "database-state")
 
-(defn update!
-  [dburl doc update-map & {:keys [resolve_conflicts] :or {resolve_conflicts true}}]
-
-  (if-let [conflicts (:_conflicts doc)]
-    (when resolve_conflicts
-      (let [bulk (map (fn [conflict] {:_id      (:_id doc)
-                                      :_rev     conflict
-                                      :_deleted true}) conflicts)]
-        (cl/bulk-update dburl bulk))))
-
-  (cl/put-document dburl (merge (dissoc doc :_conflicts) update-map)))
-
-(def exponential-backoff-strategy (again/max-delay 10000
-                                      (again/randomize-strategy 0.5
-                                        (again/multiplicative-strategy 100 2))))
-
-(defn update-document!
-  "Creates or updates the document with doc-id"
-
-  [db doc-id update-map]
-
-
-  (again/with-retries exponential-backoff-strategy
-    ;; PUT/POST document
-    (if-let [doc (cl/get-document @db doc-id :conflicts true)]
-      (update! @db doc update-map)
-      (cl/put-document @db (assoc update-map :_id doc-id)))))
-
+(defn state-document-id
+  [database-name]
+  (str database-name "-" (str (UUID/randomUUID))))
 
 (defn set-watched-state!
   [database-name last-seq]
   (ensure-db)
-  (-> (update-document! db database-name {:last-seq last-seq :type database-state-type})
-    (cl/dissoc-meta)))
+  (let [doc (cl/put-document @db (state-document-id database-name) {:last-seq  last-seq
+                                                                         :type      database-state-type
+                                                                         :database  database-name
+                                                                         :timestamp (tc/to-long (time/now))})]
+    {::last-seq (:last-seq doc)}))
 
 (defn changes-since
   "Returns all database changes since the given sequence (a string) for the database db"
