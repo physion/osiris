@@ -4,7 +4,6 @@
             [clojure.tools.logging :as logging]
             [osiris.logging]
             [slingshot.slingshot :refer [try+]]
-            [again.core :as again]
             [clj-time.core :as time]
             [clj-time.coerce :as tc])
   (:import (java.util UUID)))

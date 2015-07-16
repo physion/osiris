@@ -11,8 +11,6 @@
                  [ring/ring-servlet "1.3.1"]
                  [javax.servlet/servlet-api "2.5"]
 
-                 [listora/again "0.1.0"]                    ;; For exponential retry strategy
-
                  [com.ashafa/clutch "0.4.0"]
                  [com.cemerick/url "0.1.1"]                 ;; For clutch
 
