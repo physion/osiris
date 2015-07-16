@@ -2,10 +2,11 @@
   :description "Ovation update handler"
   :url "http://ovation.io"
 
-  :dependencies [[org.clojure/clojure "1.6.0"]
+  :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/core.incubator "0.1.3"]
 
-                 [metosin/compojure-api "0.18.0"]
+                 ;; Compojure API and middleware
+                 [metosin/compojure-api "0.22.1"]
 
                  [ring/ring-servlet "1.3.1"]
                  [javax.servlet/servlet-api "2.5"]
@@ -17,12 +18,17 @@
 
                  [clj-time "0.9.0"]
 
-                 [com.newrelic.agent.java/newrelic-agent "3.11.0"] ;; NB Update javaagent string
-                 [com.newrelic.agent.java/newrelic-api "3.11.0"] ;; NB Update javaagent string
-
                  [ring/ring-codec "1.0.0"]
                  [org.clojure/data.json "0.2.5"]
 
+                 ;; New Relic
+                 [com.newrelic.agent.java/newrelic-agent "3.11.0"] ;; NB Update javaagent string
+                 [com.newrelic.agent.java/newrelic-api "3.11.0"]
+
+                 ;; Raygun
+                 [thegreatape/ring-raygun "0.1.0"]
+
+                 ;; Logging
                  [org.clojure/tools.logging "0.3.1"]
                  [clj-logging-config "1.9.12"]
                  [org.slf4j/slf4j-api "1.7.7"]
